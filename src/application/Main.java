@@ -230,7 +230,7 @@ public class Main extends Application {
               public void handle(ActionEvent arg0) {
                 Stage graph = new Stage();
                 BorderPane bP = new BorderPane();
-                Scene s2 = new Scene(bP , 600,400);
+                Scene s2 = new Scene(bP , 600,450);
                 graph.setTitle("Farm Report");
                 graph.setScene(s2);
                 graph.show();
