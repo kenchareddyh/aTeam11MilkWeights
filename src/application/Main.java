@@ -71,7 +71,7 @@ public class Main extends Application {
           
         });
         vbox.getChildren().addAll(l,l2,b);
-        Scene scene = new Scene(vbox, 200,100);
+        Scene scene = new Scene(vbox, 200,200);
         popup.setScene(scene);
         popup.show();
         
