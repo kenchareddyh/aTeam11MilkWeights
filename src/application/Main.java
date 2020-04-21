@@ -80,6 +80,36 @@ public class Main extends Application {
     });
 
     Button readData = new Button("Read Data");
+    
+    readData.setOnAction(new EventHandler<ActionEvent>() {
+
+      int maxYear = 2019;
+      int minYear = 2000;
+      
+      VBox cb = new VBox();
+
+      //Scene scene = new Scene(cb, 200, 200);
+      Stage popup = new Stage();
+
+      ListView<String> list = new ListView<>();
+      ObservableList<String> data = FXCollections.observableArrayList();
+
+      @Override
+      public void handle(ActionEvent arg0) {
+        for (int i = minYear; i <= maxYear; i++) {
+          for (int j = 1; j < 13; j++) {
+            String value = i + "-" + j;
+            data.add(value);
+          }
+        }
+        list.setItems(data);
+        cb.getChildren().add(list);
+        Scene scene = new Scene(cb, 400, 400);
+        popup.setScene(scene);
+        popup.setTitle("Select the year and month you would like to read");
+        popup.show();
+      }
+    });
 
     Button report = new Button("Generate Report");
     report.setOnAction(new EventHandler<ActionEvent>() {
