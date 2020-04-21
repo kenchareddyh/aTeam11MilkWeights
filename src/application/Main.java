@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -61,7 +62,6 @@ public class Main extends Application {
         Label l2 = new Label("Upload a file: ");
         Button b = new Button("Choose File:");
         b.setOnAction(new EventHandler<ActionEvent>() {
-
           @Override
           public void handle(ActionEvent arg0) {
             FileChooser fileChooser = new FileChooser();
@@ -74,16 +74,185 @@ public class Main extends Application {
         Scene scene = new Scene(vbox, 200,200);
         popup.setScene(scene);
         popup.show();
-        
-        
+
       }
       
     });
 
-
     Button readData = new Button("Read Data");
 
     Button report = new Button("Generate Report");
+    report.setOnAction(new EventHandler<ActionEvent>() {
+
+      @Override
+      public void handle(ActionEvent arg0) {
+        Stage popup = new Stage();
+        popup.setTitle("Generate Report");
+        BorderPane bPane = new BorderPane();
+        VBox vbox = new VBox();
+        Label l = new Label("Select the report you would like to generate");
+        Button farm = new Button("Farm Report");
+        Button annual = new Button("Annual Report");
+        Button monthly = new Button("Monthly Report");
+        Button dateRange = new Button("Date Range Report");
+        
+        bPane.setCenter(vbox);
+        bPane.setPadding(new Insets(20));
+        vbox.getChildren().addAll(l, farm, annual, monthly, dateRange);
+        
+        farm.setOnAction(new EventHandler<ActionEvent>() {
+
+          @Override
+          public void handle(ActionEvent arg0) {
+            Stage popup1 = new Stage();
+            BorderPane bordPane = new BorderPane();
+            VBox vbox1 = new VBox();
+            popup1.setTitle("Generate Farmer Report");
+            Label l1 = new Label("Farmer id:");
+            TextField t1 = new TextField();
+            Label l2 = new Label("Year:");
+            TextField t2 = new TextField();
+            Button generate = new Button("Generate Report");
+            vbox1.getChildren().addAll(l1,t1,l2,t2,generate);
+            generate.setOnAction(new EventHandler<ActionEvent>() {
+
+              @Override
+              public void handle(ActionEvent arg0) {
+                Stage graph = new Stage();
+                BorderPane bP = new BorderPane();
+                Scene s2 = new Scene(bP , 600,400);
+                graph.setTitle("Farm Report");
+                graph.setScene(s2);
+                graph.show();
+              }
+              
+            });
+            
+            bordPane.setCenter(vbox1);
+            bordPane.setPadding(new Insets(20));
+            Scene s1 = new Scene(bordPane , 200,200);
+            popup1.setScene(s1);
+            popup1.show();
+          }
+          
+        });
+        
+        annual.setOnAction(new EventHandler<ActionEvent>() {
+
+          @Override
+          public void handle(ActionEvent arg0) {
+            Stage popup1 = new Stage();
+            BorderPane bordPane = new BorderPane();
+            VBox vbox1 = new VBox();
+            popup1.setTitle("Generate Annual Report");
+            
+            Label l1 = new Label("Year:");
+            TextField t1 = new TextField();
+            Button generate = new Button("Generate Report");
+            vbox1.getChildren().addAll(l1,t1,generate);
+            generate.setOnAction(new EventHandler<ActionEvent>() {
+
+              @Override
+              public void handle(ActionEvent arg0) {
+                Stage graph = new Stage();
+                BorderPane bP = new BorderPane();
+                Scene s2 = new Scene(bP , 600,400);
+                graph.setTitle("Farm Report");
+                graph.setScene(s2);
+                graph.show();
+              }
+              
+            });
+            bordPane.setCenter(vbox1);
+            bordPane.setPadding(new Insets(20));
+            Scene s1 = new Scene(bordPane , 200,200);
+            popup1.setScene(s1);
+            popup1.show();
+          }
+          
+        });
+        
+        monthly.setOnAction(new EventHandler<ActionEvent>() {
+
+          @Override
+          public void handle(ActionEvent arg0) {
+            Stage popup1 = new Stage();
+            BorderPane bordPane = new BorderPane();
+            VBox vbox1 = new VBox();
+            popup1.setTitle("Generate Monthly Report");
+            
+            Label l1 = new Label("Year:");
+            TextField t1 = new TextField();
+            Label l2 = new Label("Month:");
+            TextField t2 = new TextField();
+            Button generate = new Button("Generate Report");
+            vbox1.getChildren().addAll(l1,t1,l2,t2,generate);
+            bordPane.setCenter(vbox1);
+            generate.setOnAction(new EventHandler<ActionEvent>() {
+
+              @Override
+              public void handle(ActionEvent arg0) {
+                Stage graph = new Stage();
+                BorderPane bP = new BorderPane();
+                Scene s2 = new Scene(bP , 600,400);
+                graph.setTitle("Farm Report");
+                graph.setScene(s2);
+                graph.show();
+              }
+              
+            });
+            bordPane.setPadding(new Insets(20));
+            Scene s1 = new Scene(bordPane , 200,200);
+            popup1.setScene(s1);
+            popup1.show();
+          }
+          
+        });
+        
+        dateRange.setOnAction(new EventHandler<ActionEvent>() {
+
+          @Override
+          public void handle(ActionEvent arg0) {
+            Stage popup1 = new Stage();
+            BorderPane bordPane = new BorderPane();
+            VBox vbox1 = new VBox();
+            popup1.setTitle("Generate Date Range Report");
+            
+            Label l1 = new Label("Start Date (Year/Month/Day):");
+            TextField t1 = new TextField();
+            Label l2 = new Label("End Date:");
+            TextField t2 = new TextField();
+            Button generate = new Button("Generate Report");
+            vbox1.getChildren().addAll(l1,t1,l2,t2,generate);
+            generate.setOnAction(new EventHandler<ActionEvent>() {
+
+              @Override
+              public void handle(ActionEvent arg0) {
+                Stage graph = new Stage();
+                BorderPane bP = new BorderPane();
+                Scene s2 = new Scene(bP , 600,400);
+                graph.setTitle("Farm Report");
+                graph.setScene(s2);
+                graph.show();
+              }
+              
+            });
+            bordPane.setCenter(vbox1);
+            bordPane.setPadding(new Insets(20));
+            Scene s1 = new Scene(bordPane , 200,200);
+            popup1.setScene(s1);
+            popup1.show();
+          }
+          
+        });
+        
+        Scene scene = new Scene(bPane, 200,200);
+        popup.setScene(scene);
+        popup.show();
+        
+      }
+      
+    });
     
     hbox.getChildren().addAll(addData, readData, report);
     
