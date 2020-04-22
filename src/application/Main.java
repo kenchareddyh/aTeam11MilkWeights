@@ -18,6 +18,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ScrollBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -31,6 +32,8 @@ import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 public class Main extends Application {
   // store any command-line arguments that were entered.
@@ -104,6 +107,39 @@ public class Main extends Application {
             data.add(value);
           }
         }
+        
+        // creates graph popup for the date thats selected
+        list.getSelectionModel().selectedItemProperty()
+            .addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
+
+              TableView table = new TableView();
+
+              Stage tableScene = new Stage();
+              tableScene.setTitle("Table view");
+              tableScene.setWidth(300);
+              tableScene.setHeight(500);
+
+              final Label label = new Label(new_val + " table");
+              label.setFont(new Font("Arial", 20));
+
+              TableColumn dateCol = new TableColumn("Date");
+              TableColumn idCol = new TableColumn("Farmer_ID");
+              TableColumn weightCol = new TableColumn("Weight");
+
+              table.getColumns().addAll(dateCol, idCol, weightCol);
+
+              final VBox vbox = new VBox();
+              vbox.setSpacing(5);
+              vbox.setPadding(new Insets(10, 0, 0, 10));
+              vbox.getChildren().addAll(label, table);
+
+              Scene scene = new Scene(vbox);
+              tableScene.setScene(scene);
+
+
+              tableScene.show();
+            });
+    
         list.setItems(data);
         cb.getChildren().add(list);
         Scene scene = new Scene(cb, 400, 400);
