@@ -1,8 +1,12 @@
 package application;
 
+import java.io.File;
 import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -34,12 +38,13 @@ import javafx.stage.Popup;
 import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.beans.value.ObservableValue;
 
 public class Main extends Application {
   // store any command-line arguments that were entered.
   // NOTE: this.getParameters().getRaw() will get these also
   private List<String> args;
+  
+  private MilkManager mm = new MilkManager();// create an instance of milkmanager
 
   private static final int WINDOW_WIDTH = 300;
   private static final int WINDOW_HEIGHT = 200;
@@ -57,6 +62,9 @@ public class Main extends Application {
     
     Button addData = new Button("Add Data");
     
+    /**
+     * Add csv file 
+     */
     addData.setOnAction(new EventHandler<ActionEvent>() {
 
       @Override
@@ -71,7 +79,10 @@ public class Main extends Application {
           @Override
           public void handle(ActionEvent arg0) {
             FileChooser fileChooser = new FileChooser();
-            fileChooser.showOpenDialog(primaryStage);
+            // get file
+            File selectedFile = fileChooser.showOpenDialog(primaryStage);
+            // parse file
+            mm.milkParser(selectedFile.getPath());
             popup.hide();
           }
           
@@ -87,10 +98,13 @@ public class Main extends Application {
 
     Button readData = new Button("Read Data");
     
+    /**
+     * Does readData stuff
+     */
     readData.setOnAction(new EventHandler<ActionEvent>() {
 
       int maxYear = 2019;
-      int minYear = 2000;
+      int minYear = 2019;
       
       VBox cb = new VBox();
 
@@ -113,7 +127,7 @@ public class Main extends Application {
         list.getSelectionModel().selectedItemProperty()
             .addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
 
-              TableView table = new TableView();
+              TableView<MilkNode> table = new TableView<MilkNode>();
 
               Stage tableScene = new Stage();
               tableScene.setTitle("Table view");
@@ -127,7 +141,29 @@ public class Main extends Application {
               TableColumn idCol = new TableColumn("Farmer_ID");
               TableColumn weightCol = new TableColumn("Weight");
 
+              
+              // create a new observable list to store data
+              ObservableList<MilkNode> data = FXCollections.observableArrayList();
+              
+              // get milkList with mm with given year and month
+              List<List<String>> milkList = mm.getYearMonth(new_val);
+              
+              
+              //populate the observable list
+              for(int i = 0; i < milkList.size(); i++) {    
+                data.add(new MilkNode(milkList.get(i)));
+              }
+              
+              
+              // Associate data with columns
+              dateCol.setCellValueFactory(new PropertyValueFactory<MilkNode, String>("date"));
+              idCol.setCellValueFactory(new PropertyValueFactory<MilkNode, String>("farmID"));
+              weightCol.setCellValueFactory(new PropertyValueFactory<MilkNode, String>("milkWeight"));
+              
+              // set data
+              table.setItems(data);
               table.getColumns().addAll(dateCol, idCol, weightCol);
+              
 
               final VBox vbox = new VBox();
               vbox.setSpacing(5);
@@ -150,6 +186,8 @@ public class Main extends Application {
       }
     });
 
+    
+    
     Button report = new Button("Generate Report");
     report.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -334,6 +372,44 @@ public class Main extends Application {
     primaryStage.setScene(mainScene);
     primaryStage.show();
   }
+  
+  /**
+   * Milk node to store into data frame nodes
+   * @author harshak
+   *
+   */
+  public class MilkNode {
+    private SimpleStringProperty date;
+    private SimpleStringProperty farmID;
+    private SimpleStringProperty milkWeight;
+    private SimpleStringProperty milkPercentage;
+    
+    MilkNode(List<String> list){
+      this.date = new SimpleStringProperty(list.get(0));
+      this.farmID = new SimpleStringProperty(list.get(1));
+      this.milkWeight = new SimpleStringProperty(list.get(2));
+    }
+    
+    public String getDate() {
+      return date.get();
+    }
+    
+    public String getFarmID() {
+      return farmID.get();
+    }
+    
+    public String getMilkWeight() {
+      return milkWeight.get();
+    }
+    
+    /**
+     * Todo
+     */
+    private void calcMilkPercentage() {
+      
+    }
+    
+  }
 
   /**
    * @param args
@@ -344,4 +420,5 @@ public class Main extends Application {
 
   
 }
+
 
