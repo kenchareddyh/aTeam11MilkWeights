@@ -249,9 +249,9 @@ public class Main extends Application {
                 TableColumn dateCol = new TableColumn("Date");
                 TableColumn weightCol = new TableColumn("Total Weight");
                 TableColumn percentCol = new TableColumn("Percent Weight");
-                dateCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("date"));
-                weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("totalWeight"));
-                percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("totalPercentage"));
+                dateCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
+                weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
+                percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
                 table.getColumns().addAll(dateCol, weightCol, percentCol);
                 
                 ObservableList<MilkStats> data = FXCollections.observableArrayList();
@@ -317,12 +317,59 @@ public class Main extends Application {
 
               @Override
               public void handle(ActionEvent arg0) {
+                VBox v = new VBox();
                 Stage graph = new Stage();
-                BorderPane bP = new BorderPane();
-                Scene s2 = new Scene(bP , 600,400);
-                graph.setTitle("Farm Report");
-                graph.setScene(s2);
-                graph.show();
+                
+                
+                
+                
+                  
+                Stage tableScene = new Stage();
+                tableScene.setTitle("Table view");
+                tableScene.setWidth(300);
+                tableScene.setHeight(500);
+              
+                TableView<MilkStats> table = new TableView<MilkStats>();
+                TableColumn farmCol = new TableColumn("Farm ID");
+                TableColumn weightCol = new TableColumn("Total Weight");
+                TableColumn percentCol = new TableColumn("Percent Weight");
+                farmCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
+                weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
+                percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
+                table.getColumns().addAll(farmCol, weightCol, percentCol);
+                
+                ObservableList<MilkStats> data = FXCollections.observableArrayList();
+                
+                // get milkList with mm with given year and month
+                List<List<String>> milkList = mm.dataForAllFarmsAnnual(t1.getText());
+                
+                
+                
+                
+              //populate the observable list
+                for(int i = 0; i < milkList.size(); i++) {    
+                  data.add(new MilkStats(milkList.get(i)));
+                }
+                
+                
+                table.setItems(data);
+                
+                
+                
+                final VBox vbox = new VBox();
+                vbox.setSpacing(5);
+                vbox.setPadding(new Insets(10, 0, 0, 10));
+                vbox.getChildren().addAll(label, table);
+
+                Scene scene = new Scene(vbox);
+                tableScene.setScene(scene);
+
+
+                tableScene.show();
+                
+                
+                
+                
               }
               
             });
@@ -355,12 +402,55 @@ public class Main extends Application {
 
               @Override
               public void handle(ActionEvent arg0) {
+                VBox v = new VBox();
                 Stage graph = new Stage();
-                BorderPane bP = new BorderPane();
-                Scene s2 = new Scene(bP , 600,400);
-                graph.setTitle("Farm Report");
-                graph.setScene(s2);
-                graph.show();
+                
+                
+                
+                
+                  
+                Stage tableScene = new Stage();
+                tableScene.setTitle("Table view");
+                tableScene.setWidth(300);
+                tableScene.setHeight(500);
+              
+                TableView<MilkStats> table = new TableView<MilkStats>();
+                TableColumn farmCol = new TableColumn("Farm ID");
+                TableColumn weightCol = new TableColumn("Total Weight");
+                TableColumn percentCol = new TableColumn("Percent Weight");
+                farmCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
+                weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
+                percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
+                table.getColumns().addAll(farmCol, weightCol, percentCol);
+                
+                ObservableList<MilkStats> data = FXCollections.observableArrayList();
+                
+                // get milkList with mm with given year and month
+                List<List<String>> milkList = mm.dataForAllFarmsMonthly(t1.getText(), t2.getText());
+                
+                
+                
+                
+              //populate the observable list
+                for(int i = 0; i < milkList.size(); i++) {    
+                  data.add(new MilkStats(milkList.get(i)));
+                }
+                
+                
+                table.setItems(data);
+                
+                
+                
+                final VBox vbox = new VBox();
+                vbox.setSpacing(5);
+                vbox.setPadding(new Insets(10, 0, 0, 10));
+                vbox.getChildren().addAll(label, table);
+
+                Scene scene = new Scene(vbox);
+                tableScene.setScene(scene);
+
+
+                tableScene.show();
               }
               
             });
@@ -467,32 +557,35 @@ public class Main extends Application {
    * Milk stats for generating data
    *
    */
+  
+  //my edit
   public class MilkStats {
-    private SimpleStringProperty date;
-    private SimpleStringProperty totalWeight;
-    private SimpleStringProperty totalPercentage;
+    private SimpleStringProperty item1;
+    private SimpleStringProperty item2;
+    private SimpleStringProperty item3;
         
     MilkStats(List<String> list){
-      this.date = new SimpleStringProperty(list.get(0));
-      this.totalWeight = new SimpleStringProperty(list.get(1));
-      this.totalPercentage = new SimpleStringProperty(list.get(2));
+      this.item1 = new SimpleStringProperty(list.get(0));
+      this.item2 = new SimpleStringProperty(list.get(1));
+      this.item3 = new SimpleStringProperty(list.get(2));
       
     }
     
-    public String getDate() {
-      return date.get();
+    public String getItem1() {
+      return item1.get();
     }
     
-    public String getTotalWeight() {
-      return totalWeight.get();
+    public String getItem2() {
+      return item2.get();
     }
     
-    public String getTotalPercentage() {
-      return totalPercentage.get();
+    public String getItem3() {
+      return item3.get();
     }
     
     
   }
+  
   
 
   /**
@@ -504,5 +597,7 @@ public class Main extends Application {
 
   
 }
+
+
 
 
