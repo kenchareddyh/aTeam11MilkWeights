@@ -102,10 +102,26 @@ public class MilkTable implements DataStructureADT {
     
   }
   
+  public String getFarmId(int index) {
+    return milkList.get(index).getFarmId();
+  }
+  
   @Override
   public List<String> getDataWithID(String farmID){
     return null;
+    
+    
   }
+  
+  public int size() {
+    return milkList.size();
+  }
+  
+  public int getMilkWeight(int index) {
+    return milkList.get(index).getMilkWeight();
+  }
+  
+  
 
   @Override
   public boolean remove(String node) throws IllegalNullKeyException {

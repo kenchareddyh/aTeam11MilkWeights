@@ -1,6 +1,7 @@
 package application;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -221,16 +222,71 @@ public class Main extends Application {
             TextField t2 = new TextField();
             Button generate = new Button("Generate Report");
             vbox1.getChildren().addAll(l1,t1,l2,t2,generate);
+            
+            
+            
+          
+            
             generate.setOnAction(new EventHandler<ActionEvent>() {
+              
+              
 
               @Override
               public void handle(ActionEvent arg0) {
+                VBox v = new VBox();
                 Stage graph = new Stage();
-                BorderPane bP = new BorderPane();
-                Scene s2 = new Scene(bP , 600,400);
-                graph.setTitle("Farm Report");
-                graph.setScene(s2);
-                graph.show();
+                
+                
+                
+                
+                  
+                Stage tableScene = new Stage();
+                tableScene.setTitle("Table view");
+                tableScene.setWidth(300);
+                tableScene.setHeight(500);
+              
+                TableView<MilkStats> table = new TableView<MilkStats>();
+                TableColumn dateCol = new TableColumn("Date");
+                TableColumn weightCol = new TableColumn("Total Weight");
+                TableColumn percentCol = new TableColumn("Percent Weight");
+                dateCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("date"));
+                weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("totalWeight"));
+                percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("totalPercentage"));
+                table.getColumns().addAll(dateCol, weightCol, percentCol);
+                
+                ObservableList<MilkStats> data = FXCollections.observableArrayList();
+                
+                // get milkList with mm with given year and month
+                List<List<String>> milkList = mm.dataForAllMonths(t2.getText(), t1.getText());
+                
+                
+                
+                
+              //populate the observable list
+                for(int i = 0; i < milkList.size(); i++) {    
+                  data.add(new MilkStats(milkList.get(i)));
+                }
+                
+                
+                table.setItems(data);
+                
+                
+                
+                final VBox vbox = new VBox();
+                vbox.setSpacing(5);
+                vbox.setPadding(new Insets(10, 0, 0, 10));
+                vbox.getChildren().addAll(label, table);
+
+                Scene scene = new Scene(vbox);
+                tableScene.setScene(scene);
+
+
+                tableScene.show();
+           
+                
+                
+                
+                
               }
               
             });
@@ -373,6 +429,8 @@ public class Main extends Application {
     primaryStage.show();
   }
   
+  
+  
   /**
    * Milk node to store into data frame nodes
    * @author harshak
@@ -382,12 +440,12 @@ public class Main extends Application {
     private SimpleStringProperty date;
     private SimpleStringProperty farmID;
     private SimpleStringProperty milkWeight;
-    private SimpleStringProperty milkPercentage;
-    
+ 
     MilkNode(List<String> list){
       this.date = new SimpleStringProperty(list.get(0));
       this.farmID = new SimpleStringProperty(list.get(1));
       this.milkWeight = new SimpleStringProperty(list.get(2));
+      
     }
     
     public String getDate() {
@@ -402,14 +460,40 @@ public class Main extends Application {
       return milkWeight.get();
     }
     
-    /**
-     * Todo
-     */
-    private void calcMilkPercentage() {
+    
+  }
+  
+  /**
+   * Milk stats for generating data
+   *
+   */
+  public class MilkStats {
+    private SimpleStringProperty date;
+    private SimpleStringProperty totalWeight;
+    private SimpleStringProperty totalPercentage;
+        
+    MilkStats(List<String> list){
+      this.date = new SimpleStringProperty(list.get(0));
+      this.totalWeight = new SimpleStringProperty(list.get(1));
+      this.totalPercentage = new SimpleStringProperty(list.get(2));
       
     }
     
+    public String getDate() {
+      return date.get();
+    }
+    
+    public String getTotalWeight() {
+      return totalWeight.get();
+    }
+    
+    public String getTotalPercentage() {
+      return totalPercentage.get();
+    }
+    
+    
   }
+  
 
   /**
    * @param args
