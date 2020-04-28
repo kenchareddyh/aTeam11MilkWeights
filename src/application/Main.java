@@ -107,7 +107,6 @@ public class Main extends Application {
       int maxYear = 2019;
       int minYear = 2019;
       
-      VBox cb = new VBox();
 
       //Scene scene = new Scene(cb, 200, 200);
       Stage popup = new Stage();
@@ -117,6 +116,7 @@ public class Main extends Application {
 
       @Override
       public void handle(ActionEvent arg0) {
+        VBox cb = new VBox();
         for (int i = minYear; i <= maxYear; i++) {
           for (int j = 1; j < 13; j++) {
             String value = i + "-" + j;
