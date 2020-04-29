@@ -3,6 +3,8 @@ package application;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
+
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.beans.property.SimpleStringProperty;
@@ -46,6 +48,7 @@ public class Main extends Application {
   private List<String> args;
 
   private MilkManager mm = new MilkManager();// create an instance of milkmanager
+  private Stack<Scene> previousScene = new Stack<Scene>();// keeps track of the last page visited
 
   private static final int WINDOW_WIDTH = 300;
   private static final int WINDOW_HEIGHT = 200;
@@ -71,7 +74,6 @@ public class Main extends Application {
       @Override
       public void handle(ActionEvent e) {
 
-        Stage popup = new Stage();
         VBox vbox = new VBox();
         Label l = new Label("Add Data");
         Label l2 = new Label("Upload a file: ");
@@ -84,14 +86,21 @@ public class Main extends Application {
             File selectedFile = fileChooser.showOpenDialog(primaryStage);
             // parse file
             mm.milkParser(selectedFile.getPath());
-            popup.hide();
+            primaryStage.setScene(previousScene.pop());
           }
-
         });
-        vbox.getChildren().addAll(l, l2, b);
+        Button back = new Button("Back");
+        back.setOnAction(new EventHandler<ActionEvent>() {
+          @Override
+          public void handle(ActionEvent arg0) {
+            primaryStage.setScene(previousScene.pop());
+          }
+        });
+        vbox.getChildren().addAll(l, l2, b, back);
         Scene scene = new Scene(vbox, 200, 200);
-        popup.setScene(scene);
-        popup.show();
+        previousScene.push(primaryStage.getScene());
+        primaryStage.setScene(scene);
+
 
       }
 
@@ -103,11 +112,6 @@ public class Main extends Application {
      * Does readData stuff
      */
     readData.setOnAction(new EventHandler<ActionEvent>() {
-
-
-
-      // Scene scene = new Scene(cb, 200, 200);
-      Stage popup = new Stage();
 
       ListView<String> list = new ListView<>();
       ObservableList<String> data = FXCollections.observableArrayList();
@@ -130,10 +134,8 @@ public class Main extends Application {
 
               TableView<MilkNode> table = new TableView<MilkNode>();
 
-              Stage tableScene = new Stage();
-              tableScene.setTitle("Table view");
-              tableScene.setWidth(300);
-              tableScene.setHeight(500);
+              primaryStage.setWidth(300);
+              primaryStage.setHeight(500);
 
               final Label label = new Label(new_val + " table");
               label.setFont(new Font("Arial", 20));
@@ -170,21 +172,32 @@ public class Main extends Application {
               final VBox vbox = new VBox();
               vbox.setSpacing(5);
               vbox.setPadding(new Insets(10, 0, 0, 10));
-              vbox.getChildren().addAll(label, table);
+              Button back = new Button("Back");
+              back.setOnAction(new EventHandler<ActionEvent>() {
+                  @Override
+                  public void handle(ActionEvent arg0) {
+                    primaryStage.setScene(previousScene.pop());
+                  }
+                });
+              vbox.getChildren().addAll(label, table, back);
 
               Scene scene = new Scene(vbox);
-              tableScene.setScene(scene);
-
-
-              tableScene.show();
+              previousScene.push(primaryStage.getScene());
+              primaryStage.setScene(scene);
             });
 
         list.setItems(data);
-        cb.getChildren().add(list);
+        Button back = new Button("Back");
+        back.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent arg0) {
+              primaryStage.setScene(previousScene.pop());
+            }
+          });
+        cb.getChildren().addAll(list, back);
         Scene scene = new Scene(cb, 400, 400);
-        popup.setScene(scene);
-        popup.setTitle("Select the year and month you would like to read");
-        popup.show();
+        previousScene.push(primaryStage.getScene());
+        primaryStage.setScene(scene);
       }
     });
 
@@ -195,8 +208,6 @@ public class Main extends Application {
 
       @Override
       public void handle(ActionEvent arg0) {
-        Stage popup = new Stage();
-        popup.setTitle("Generate Report");
         BorderPane bPane = new BorderPane();
         VBox vbox = new VBox();
         Label l = new Label("Select the report you would like to generate");
@@ -204,25 +215,25 @@ public class Main extends Application {
         Button annual = new Button("Annual Report");
         Button monthly = new Button("Monthly Report");
         Button dateRange = new Button("Date Range Report");
+        Button back = new Button("Back");
 
         bPane.setCenter(vbox);
         bPane.setPadding(new Insets(20));
-        vbox.getChildren().addAll(l, farm, annual, monthly, dateRange);
+        vbox.getChildren().addAll(l, farm, annual, monthly, dateRange, back);
 
         farm.setOnAction(new EventHandler<ActionEvent>() {
 
           @Override
           public void handle(ActionEvent arg0) {
-            Stage popup1 = new Stage();
             BorderPane bordPane = new BorderPane();
             VBox vbox1 = new VBox();
-            popup1.setTitle("Generate Farmer Report");
             Label l1 = new Label("Farmer id:");
             TextField t1 = new TextField();
             Label l2 = new Label("Year:");
             TextField t2 = new TextField();
             Button generate = new Button("Generate Report");
-            vbox1.getChildren().addAll(l1, t1, l2, t2, generate);
+            Button back = new Button("Back");
+            vbox1.getChildren().addAll(l1, t1, l2, t2, generate, back);
 
 
 
@@ -240,10 +251,16 @@ public class Main extends Application {
 
 
 
-                  Stage tableScene = new Stage();
-                  tableScene.setTitle("Table view");
-                  tableScene.setWidth(300);
-                  tableScene.setHeight(500);
+                  primaryStage.setWidth(300);
+                  primaryStage.setHeight(500);
+                  
+                  Button back = new Button("Back");
+                  back.setOnAction(new EventHandler<ActionEvent>() {
+                      @Override
+                      public void handle(ActionEvent arg0) {
+                        primaryStage.setScene(previousScene.pop());
+                      }
+                    });
 
                   TableView<MilkStats> table = new TableView<MilkStats>();
                   TableColumn dateCol = new TableColumn("Date");
@@ -277,13 +294,11 @@ public class Main extends Application {
                   VBox vBox = new VBox();
                   vBox.setSpacing(5);
                   vBox.setPadding(new Insets(10, 0, 0, 10));
-                  vBox.getChildren().addAll(label, table);
+                  vBox.getChildren().addAll(label, table, back);
 
                   Scene scene = new Scene(vBox);
-                  tableScene.setScene(scene);
-
-
-                  tableScene.show();
+                  previousScene.push(primaryStage.getScene());
+                  primaryStage.setScene(scene);
                 } catch (Exception e) {
 
                   vbox1.getChildren().add(l);
@@ -294,12 +309,19 @@ public class Main extends Application {
               }
 
             });
+            
+            back.setOnAction(new EventHandler<ActionEvent>() {
+              @Override
+              public void handle(ActionEvent arg0) {
+                primaryStage.setScene(previousScene.pop());
+              }
+            });
 
             bordPane.setCenter(vbox1);
             bordPane.setPadding(new Insets(20));
             Scene s1 = new Scene(bordPane, 200, 200);
-            popup1.setScene(s1);
-            popup1.show();
+            previousScene.push(primaryStage.getScene());
+            primaryStage.setScene(s1);
           }
 
         });
@@ -308,15 +330,20 @@ public class Main extends Application {
 
           @Override
           public void handle(ActionEvent arg0) {
-            Stage popup1 = new Stage();
             BorderPane bordPane = new BorderPane();
             VBox vbox1 = new VBox();
-            popup1.setTitle("Generate Annual Report");
 
             Label l1 = new Label("Year:");
             TextField t1 = new TextField();
             Button generate = new Button("Generate Report");
-            vbox1.getChildren().addAll(l1, t1, generate);
+            Button back = new Button("Back");
+            back.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent arg0) {
+                  primaryStage.setScene(previousScene.pop());
+                }
+              });
+            vbox1.getChildren().addAll(l1, t1, generate, back);
 
             Label l = new Label("Invalid data");
             generate.setOnAction(new EventHandler<ActionEvent>() {
@@ -331,7 +358,6 @@ public class Main extends Application {
 
 
                   Stage tableScene = new Stage();
-                  tableScene.setTitle("Table view");
                   tableScene.setWidth(300);
                   tableScene.setHeight(500);
 
@@ -360,19 +386,25 @@ public class Main extends Application {
 
 
                   table.setItems(data);
+                  
+                  Button back = new Button("Back");
+                  back.setOnAction(new EventHandler<ActionEvent>() {
+                      @Override
+                      public void handle(ActionEvent arg0) {
+                        primaryStage.setScene(previousScene.pop());
+                      }
+                    });
 
 
 
                   final VBox vbox = new VBox();
                   vbox.setSpacing(5);
                   vbox.setPadding(new Insets(10, 0, 0, 10));
-                  vbox.getChildren().addAll(label, table);
+                  vbox.getChildren().addAll(label, table, back);
 
                   Scene scene = new Scene(vbox);
-                  tableScene.setScene(scene);
-
-
-                  tableScene.show();
+                  previousScene.push(primaryStage.getScene());
+                  primaryStage.setScene(scene);
 
                 } catch (Exception e) {
                   vbox1.getChildren().add(l);
@@ -386,8 +418,8 @@ public class Main extends Application {
             bordPane.setCenter(vbox1);
             bordPane.setPadding(new Insets(20));
             Scene s1 = new Scene(bordPane, 200, 200);
-            popup1.setScene(s1);
-            popup1.show();
+            previousScene.push(primaryStage.getScene());
+            primaryStage.setScene(s1);
           }
 
         });
@@ -396,17 +428,22 @@ public class Main extends Application {
 
           @Override
           public void handle(ActionEvent arg0) {
-            Stage popup1 = new Stage();
             BorderPane bordPane = new BorderPane();
             VBox vbox1 = new VBox();
-            popup1.setTitle("Generate Monthly Report");
 
             Label l1 = new Label("Year:");
             TextField t1 = new TextField();
             Label l2 = new Label("Month:");
             TextField t2 = new TextField();
             Button generate = new Button("Generate Report");
-            vbox1.getChildren().addAll(l1, t1, l2, t2, generate);
+            Button back = new Button("Back");
+            back.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent arg0) {
+                  primaryStage.setScene(previousScene.pop());
+                }
+              });
+            vbox1.getChildren().addAll(l1, t1, l2, t2, generate, back);
             bordPane.setCenter(vbox1);
 
             Label l = new Label("Invalid data");
@@ -419,12 +456,8 @@ public class Main extends Application {
                   VBox v = new VBox();
                   Stage graph = new Stage();
 
-
-
-                  Stage tableScene = new Stage();
-                  tableScene.setTitle("Table view");
-                  tableScene.setWidth(300);
-                  tableScene.setHeight(500);
+                  primaryStage.setWidth(300);
+                  primaryStage.setHeight(500);
 
                   TableView<MilkStats> table = new TableView<MilkStats>();
                   TableColumn farmCol = new TableColumn("Farm ID");
@@ -455,16 +488,21 @@ public class Main extends Application {
 
 
 
+                  Button back = new Button("Back");
+                  back.setOnAction(new EventHandler<ActionEvent>() {
+                      @Override
+                      public void handle(ActionEvent arg0) {
+                        primaryStage.setScene(previousScene.pop());
+                      }
+                    });
                   final VBox vbox = new VBox();
                   vbox.setSpacing(5);
                   vbox.setPadding(new Insets(10, 0, 0, 10));
-                  vbox.getChildren().addAll(label, table);
+                  vbox.getChildren().addAll(label, table, back);
 
                   Scene scene = new Scene(vbox);
-                  tableScene.setScene(scene);
-
-
-                  tableScene.show();
+                  previousScene.push(primaryStage.getScene());
+                  primaryStage.setScene(scene);
                 } catch (Exception e) {
                   vbox1.getChildren().add(l);
                 }
@@ -474,8 +512,8 @@ public class Main extends Application {
             });
             bordPane.setPadding(new Insets(20));
             Scene s1 = new Scene(bordPane, 200, 200);
-            popup1.setScene(s1);
-            popup1.show();
+            previousScene.push(primaryStage.getScene());
+            primaryStage.setScene(s1);
           }
 
         });
@@ -484,17 +522,22 @@ public class Main extends Application {
 
           @Override
           public void handle(ActionEvent arg0) {
-            Stage popup1 = new Stage();
             BorderPane bordPane = new BorderPane();
             VBox vbox1 = new VBox();
-            popup1.setTitle("Generate Date Range Report");
 
             Label l1 = new Label("Start Date (Year/Month/Day):");
             TextField t1 = new TextField();
             Label l2 = new Label("End Date:");
             TextField t2 = new TextField();
             Button generate = new Button("Generate Report");
-            vbox1.getChildren().addAll(l1, t1, l2, t2, generate);
+            Button back = new Button("Back");
+            back.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent arg0) {
+                  primaryStage.setScene(previousScene.pop());
+                }
+              });
+            vbox1.getChildren().addAll(l1, t1, l2, t2, generate, back);
 
 
             generate.setOnAction(new EventHandler<ActionEvent>() {
@@ -502,10 +545,8 @@ public class Main extends Application {
               @Override
               public void handle(ActionEvent arg0) {
 
-                Stage tableScene = new Stage();
-                tableScene.setTitle("Date Range Report");
-                tableScene.setWidth(300);
-                tableScene.setHeight(500);
+                primaryStage.setWidth(300);
+                primaryStage.setHeight(500);
 
                 TableView<MilkStats> table = new TableView<MilkStats>();
                 TableColumn farmCol = new TableColumn("Farm ID");
@@ -545,27 +586,39 @@ public class Main extends Application {
                 final VBox vbox = new VBox();
                 vbox.setSpacing(5);
                 vbox.setPadding(new Insets(10, 0, 0, 10));
-                vbox.getChildren().addAll(label, table);
+                Button back = new Button("Back");
+                back.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent arg0) {
+                      primaryStage.setScene(previousScene.pop());
+                    }
+                  });
+                vbox.getChildren().addAll(label, table, back);
 
                 Scene scene = new Scene(vbox);
-                tableScene.setScene(scene);
-
-                tableScene.show();
+                previousScene.push(primaryStage.getScene());
+                primaryStage.setScene(scene);
               }
 
             });
             bordPane.setCenter(vbox1);
             bordPane.setPadding(new Insets(20));
             Scene s1 = new Scene(bordPane, 200, 200);
-            popup1.setScene(s1);
-            popup1.show();
+            previousScene.push(primaryStage.getScene());
+            primaryStage.setScene(s1);
           }
 
         });
+        back.setOnAction(new EventHandler<ActionEvent>() {
+          @Override
+          public void handle(ActionEvent arg0) {
+            primaryStage.setScene(previousScene.pop());
+          }
+        });
 
         Scene scene = new Scene(bPane, 200, 200);
-        popup.setScene(scene);
-        popup.show();
+        previousScene.push(primaryStage.getScene());
+        primaryStage.setScene(scene);
 
       }
 
