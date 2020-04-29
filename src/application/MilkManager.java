@@ -99,6 +99,50 @@ public class MilkManager {
         while ((line = csvReader.readLine()) != null) {
           // split table into rows and add each row to records
           String[] values = line.split(",");
+          
+          //error handling start
+          
+          //checks if there are only 3 colums
+          if(values.length<3) {
+            //create popup error saying missing data
+          }
+          if(values.length>3) {
+            //create popup error saying excess data
+          }
+          
+          //to check the date
+          String[] dateSplit = values[0].split("-");
+          
+          //might have to check if its null after split
+          
+          // checking if the format is right
+          if(dateSplit.length!=3) {
+            //create popup date format wrong
+          }
+          
+          //checks if each part of the date is in number format
+          for(int i =0;i<3;i++) {
+            try {
+              Integer.parseInt(dateSplit[i]);
+            }
+            catch(Exception e) {
+              //not sure which exception to catch
+              //create a popup coz date has characters other than numbers and dashes
+            }
+          }
+          
+          //checks if the weight is in number format
+          try {
+            Integer.parseInt(values[2]);
+          }
+          catch(Exception e2) {
+            //not sure which exception to catch
+            //create a popup coz weight has characters other than nurmbers
+          }
+          
+          //error handling end 
+          
+          
           records.add(Arrays.asList(values));
         }
         csvReader.close();
