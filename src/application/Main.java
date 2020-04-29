@@ -509,12 +509,56 @@ public class Main extends Application {
 
               @Override
               public void handle(ActionEvent arg0) {
-                Stage graph = new Stage();
-                BorderPane bP = new BorderPane();
-                Scene s2 = new Scene(bP , 600,450);
-                graph.setTitle("Farm Report");
-                graph.setScene(s2);
-                graph.show();
+                
+                Stage tableScene = new Stage();
+                tableScene.setTitle("Date Range Report");
+                tableScene.setWidth(300);
+                tableScene.setHeight(500);
+
+                TableView<MilkStats> table = new TableView<MilkStats>();
+                TableColumn farmCol = new TableColumn("Farm ID");
+                TableColumn weightCol = new TableColumn("Total Weight");
+                TableColumn percentCol = new TableColumn("Percent Weight");
+                farmCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
+                weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
+                percentCol
+                    .setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
+                table.getColumns().addAll(farmCol, weightCol, percentCol);
+
+                ObservableList<MilkStats> data = FXCollections.observableArrayList();
+
+                String startDate = t1.getText();
+                String endDate = t2.getText();
+                String[] startArr = startDate.split("/");
+                String[] endArr = endDate.split("/");
+
+                // get milkList with mm with given year and month
+                List<List<String>> milkList = mm.generateDateRangeReport(
+                    Integer.parseInt(startArr[0]), Integer.parseInt(startArr[1]),
+                    Integer.parseInt(startArr[2]), Integer.parseInt(endArr[0]),
+                    Integer.parseInt(endArr[1]), Integer.parseInt(endArr[2]));
+
+
+
+                // populate the observable list
+                for (int i = 0; i < milkList.size(); i++) {
+                  data.add(new MilkStats(milkList.get(i)));
+                }
+
+
+                table.setItems(data);
+
+
+
+                final VBox vbox = new VBox();
+                vbox.setSpacing(5);
+                vbox.setPadding(new Insets(10, 0, 0, 10));
+                vbox.getChildren().addAll(label, table);
+
+                Scene scene = new Scene(vbox);
+                tableScene.setScene(scene);
+                
+                tableScene.show();
               }
               
             });
