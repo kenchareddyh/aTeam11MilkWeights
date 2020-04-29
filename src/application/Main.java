@@ -44,7 +44,7 @@ public class Main extends Application {
   // store any command-line arguments that were entered.
   // NOTE: this.getParameters().getRaw() will get these also
   private List<String> args;
-  
+
   private MilkManager mm = new MilkManager();// create an instance of milkmanager
 
   private static final int WINDOW_WIDTH = 300;
@@ -60,17 +60,17 @@ public class Main extends Application {
     Label label = new Label("MILK WEIGHTS");
     root.setTop(label);
     root.setCenter(hbox);
-    
+
     Button addData = new Button("Add Data");
-    
+
     /**
-     * Add csv file 
+     * Add csv file
      */
     addData.setOnAction(new EventHandler<ActionEvent>() {
 
       @Override
       public void handle(ActionEvent e) {
-        
+
         Stage popup = new Stage();
         VBox vbox = new VBox();
         Label l = new Label("Add Data");
@@ -86,29 +86,27 @@ public class Main extends Application {
             mm.milkParser(selectedFile.getPath());
             popup.hide();
           }
-          
+
         });
-        vbox.getChildren().addAll(l,l2,b);
-        Scene scene = new Scene(vbox, 200,200);
+        vbox.getChildren().addAll(l, l2, b);
+        Scene scene = new Scene(vbox, 200, 200);
         popup.setScene(scene);
         popup.show();
 
       }
-      
+
     });
 
     Button readData = new Button("Read Data");
-    
+
     /**
      * Does readData stuff
      */
     readData.setOnAction(new EventHandler<ActionEvent>() {
 
-      int maxYear = 2019;
-      int minYear = 2019;
-      
 
-      //Scene scene = new Scene(cb, 200, 200);
+
+      // Scene scene = new Scene(cb, 200, 200);
       Stage popup = new Stage();
 
       ListView<String> list = new ListView<>();
@@ -117,13 +115,15 @@ public class Main extends Application {
       @Override
       public void handle(ActionEvent arg0) {
         VBox cb = new VBox();
+        int maxYear = mm.getMaxYear();
+        int minYear = mm.getMinYear();
         for (int i = minYear; i <= maxYear; i++) {
           for (int j = 1; j < 13; j++) {
             String value = i + "-" + j;
             data.add(value);
           }
         }
-        
+
         // creates graph popup for the date thats selected
         list.getSelectionModel().selectedItemProperty()
             .addListener((ObservableValue<? extends String> ov, String old_val, String new_val) -> {
@@ -142,29 +142,30 @@ public class Main extends Application {
               TableColumn idCol = new TableColumn("Farmer_ID");
               TableColumn weightCol = new TableColumn("Weight");
 
-              
+
               // create a new observable list to store data
               ObservableList<MilkNode> data = FXCollections.observableArrayList();
-              
+
               // get milkList with mm with given year and month
               List<List<String>> milkList = mm.getYearMonth(new_val);
-              
-              
-              //populate the observable list
-              for(int i = 0; i < milkList.size(); i++) {    
+
+
+              // populate the observable list
+              for (int i = 0; i < milkList.size(); i++) {
                 data.add(new MilkNode(milkList.get(i)));
               }
-              
-              
+
+
               // Associate data with columns
               dateCol.setCellValueFactory(new PropertyValueFactory<MilkNode, String>("date"));
               idCol.setCellValueFactory(new PropertyValueFactory<MilkNode, String>("farmID"));
-              weightCol.setCellValueFactory(new PropertyValueFactory<MilkNode, String>("milkWeight"));
-              
+              weightCol
+                  .setCellValueFactory(new PropertyValueFactory<MilkNode, String>("milkWeight"));
+
               // set data
               table.setItems(data);
               table.getColumns().addAll(dateCol, idCol, weightCol);
-              
+
 
               final VBox vbox = new VBox();
               vbox.setSpacing(5);
@@ -177,7 +178,7 @@ public class Main extends Application {
 
               tableScene.show();
             });
-    
+
         list.setItems(data);
         cb.getChildren().add(list);
         Scene scene = new Scene(cb, 400, 400);
@@ -187,8 +188,8 @@ public class Main extends Application {
       }
     });
 
-    
-    
+
+
     Button report = new Button("Generate Report");
     report.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -203,11 +204,11 @@ public class Main extends Application {
         Button annual = new Button("Annual Report");
         Button monthly = new Button("Monthly Report");
         Button dateRange = new Button("Date Range Report");
-        
+
         bPane.setCenter(vbox);
         bPane.setPadding(new Insets(20));
         vbox.getChildren().addAll(l, farm, annual, monthly, dateRange);
-        
+
         farm.setOnAction(new EventHandler<ActionEvent>() {
 
           @Override
@@ -221,15 +222,14 @@ public class Main extends Application {
             Label l2 = new Label("Year:");
             TextField t2 = new TextField();
             Button generate = new Button("Generate Report");
-            vbox1.getChildren().addAll(l1,t1,l2,t2,generate);
-            
-            
-            
-          
+            vbox1.getChildren().addAll(l1, t1, l2, t2, generate);
+
+
+
             Label l = new Label("Invalid data");
             generate.setOnAction(new EventHandler<ActionEvent>() {
-              
-              
+
+
 
               @Override
               public void handle(ActionEvent arg0) {
@@ -237,46 +237,43 @@ public class Main extends Application {
                   vbox1.getChildren().remove(l);
                   VBox v = new VBox();
                   Stage graph = new Stage();
-                  
-                  
-                  
-                  
-                    
+
+
+
                   Stage tableScene = new Stage();
                   tableScene.setTitle("Table view");
                   tableScene.setWidth(300);
                   tableScene.setHeight(500);
-                
+
                   TableView<MilkStats> table = new TableView<MilkStats>();
                   TableColumn dateCol = new TableColumn("Date");
                   TableColumn weightCol = new TableColumn("Total Weight");
                   TableColumn percentCol = new TableColumn("Percent Weight");
                   dateCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
-                  weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
-                  percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
+                  weightCol
+                      .setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
+                  percentCol
+                      .setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
                   table.getColumns().addAll(dateCol, weightCol, percentCol);
-                  
+
                   ObservableList<MilkStats> data = FXCollections.observableArrayList();
-                  
+
                   // get milkList with mm with given year and month
-                  
+
                   List<List<String>> milkList = mm.dataForAllMonths(t2.getText(), t1.getText());
-                  
-                  
-                  
-                  
-                  
-                  
-                //populate the observable list
-                  for(int i = 0; i < milkList.size(); i++) {    
+
+
+
+                  // populate the observable list
+                  for (int i = 0; i < milkList.size(); i++) {
                     data.add(new MilkStats(milkList.get(i)));
                   }
-                  
-                  
+
+
                   table.setItems(data);
-                  
-                  
-                  
+
+
+
                   VBox vBox = new VBox();
                   vBox.setSpacing(5);
                   vBox.setPadding(new Insets(10, 0, 0, 10));
@@ -287,29 +284,26 @@ public class Main extends Application {
 
 
                   tableScene.show();
-                }catch(Exception e) {
-                  
+                } catch (Exception e) {
+
                   vbox1.getChildren().add(l);
                 }
-                
-           
-                
-                
-                
-                
+
+
+
               }
-              
+
             });
-            
+
             bordPane.setCenter(vbox1);
             bordPane.setPadding(new Insets(20));
-            Scene s1 = new Scene(bordPane , 200,200);
+            Scene s1 = new Scene(bordPane, 200, 200);
             popup1.setScene(s1);
             popup1.show();
           }
-          
+
         });
-        
+
         annual.setOnAction(new EventHandler<ActionEvent>() {
 
           @Override
@@ -318,12 +312,12 @@ public class Main extends Application {
             BorderPane bordPane = new BorderPane();
             VBox vbox1 = new VBox();
             popup1.setTitle("Generate Annual Report");
-            
+
             Label l1 = new Label("Year:");
             TextField t1 = new TextField();
             Button generate = new Button("Generate Report");
-            vbox1.getChildren().addAll(l1,t1,generate);
-            
+            vbox1.getChildren().addAll(l1, t1, generate);
+
             Label l = new Label("Invalid data");
             generate.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -333,43 +327,42 @@ public class Main extends Application {
                   vbox1.getChildren().remove(l);
                   VBox v = new VBox();
                   Stage graph = new Stage();
-                  
-                  
-                  
-                  
-                    
+
+
+
                   Stage tableScene = new Stage();
                   tableScene.setTitle("Table view");
                   tableScene.setWidth(300);
                   tableScene.setHeight(500);
-                
+
                   TableView<MilkStats> table = new TableView<MilkStats>();
                   TableColumn farmCol = new TableColumn("Farm ID");
                   TableColumn weightCol = new TableColumn("Total Weight");
                   TableColumn percentCol = new TableColumn("Percent Weight");
                   farmCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
-                  weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
-                  percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
+                  weightCol
+                      .setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
+                  percentCol
+                      .setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
                   table.getColumns().addAll(farmCol, weightCol, percentCol);
-                  
+
                   ObservableList<MilkStats> data = FXCollections.observableArrayList();
-                  
+
                   // get milkList with mm with given year and month
                   List<List<String>> milkList = mm.dataForAllFarmsAnnual(t1.getText());
-                  
-                  
-                  
-                  
-                //populate the observable list
-                  for(int i = 0; i < milkList.size(); i++) {    
+
+
+
+                  // populate the observable list
+                  for (int i = 0; i < milkList.size(); i++) {
                     data.add(new MilkStats(milkList.get(i)));
                   }
-                  
-                  
+
+
                   table.setItems(data);
-                  
-                  
-                  
+
+
+
                   final VBox vbox = new VBox();
                   vbox.setSpacing(5);
                   vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -380,26 +373,25 @@ public class Main extends Application {
 
 
                   tableScene.show();
-                  
-                }catch(Exception e) {
+
+                } catch (Exception e) {
                   vbox1.getChildren().add(l);
                 }
-                
-                
-                
-                
+
+
+
               }
-              
+
             });
             bordPane.setCenter(vbox1);
             bordPane.setPadding(new Insets(20));
-            Scene s1 = new Scene(bordPane , 200,200);
+            Scene s1 = new Scene(bordPane, 200, 200);
             popup1.setScene(s1);
             popup1.show();
           }
-          
+
         });
-        
+
         monthly.setOnAction(new EventHandler<ActionEvent>() {
 
           @Override
@@ -408,15 +400,15 @@ public class Main extends Application {
             BorderPane bordPane = new BorderPane();
             VBox vbox1 = new VBox();
             popup1.setTitle("Generate Monthly Report");
-            
+
             Label l1 = new Label("Year:");
             TextField t1 = new TextField();
             Label l2 = new Label("Month:");
             TextField t2 = new TextField();
             Button generate = new Button("Generate Report");
-            vbox1.getChildren().addAll(l1,t1,l2,t2,generate);
+            vbox1.getChildren().addAll(l1, t1, l2, t2, generate);
             bordPane.setCenter(vbox1);
-            
+
             Label l = new Label("Invalid data");
             generate.setOnAction(new EventHandler<ActionEvent>() {
 
@@ -426,43 +418,43 @@ public class Main extends Application {
                   vbox1.getChildren().remove(l);
                   VBox v = new VBox();
                   Stage graph = new Stage();
-                  
-                  
-                  
-                  
-                    
+
+
+
                   Stage tableScene = new Stage();
                   tableScene.setTitle("Table view");
                   tableScene.setWidth(300);
                   tableScene.setHeight(500);
-                
+
                   TableView<MilkStats> table = new TableView<MilkStats>();
                   TableColumn farmCol = new TableColumn("Farm ID");
                   TableColumn weightCol = new TableColumn("Total Weight");
                   TableColumn percentCol = new TableColumn("Percent Weight");
                   farmCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
-                  weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
-                  percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
+                  weightCol
+                      .setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
+                  percentCol
+                      .setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
                   table.getColumns().addAll(farmCol, weightCol, percentCol);
-                  
+
                   ObservableList<MilkStats> data = FXCollections.observableArrayList();
-                  
+
                   // get milkList with mm with given year and month
-                  List<List<String>> milkList = mm.dataForAllFarmsMonthly(t1.getText(), t2.getText());
-                  
-                  
-                  
-                  
-                //populate the observable list
-                  for(int i = 0; i < milkList.size(); i++) {    
+                  List<List<String>> milkList =
+                      mm.dataForAllFarmsMonthly(t1.getText(), t2.getText());
+
+
+
+                  // populate the observable list
+                  for (int i = 0; i < milkList.size(); i++) {
                     data.add(new MilkStats(milkList.get(i)));
                   }
-                  
-                  
+
+
                   table.setItems(data);
-                  
-                  
-                  
+
+
+
                   final VBox vbox = new VBox();
                   vbox.setSpacing(5);
                   vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -473,21 +465,21 @@ public class Main extends Application {
 
 
                   tableScene.show();
-                }catch(Exception e) {
+                } catch (Exception e) {
                   vbox1.getChildren().add(l);
                 }
-                
+
               }
-              
+
             });
             bordPane.setPadding(new Insets(20));
-            Scene s1 = new Scene(bordPane , 200,200);
+            Scene s1 = new Scene(bordPane, 200, 200);
             popup1.setScene(s1);
             popup1.show();
           }
-          
+
         });
-        
+
         dateRange.setOnAction(new EventHandler<ActionEvent>() {
 
           @Override
@@ -496,20 +488,20 @@ public class Main extends Application {
             BorderPane bordPane = new BorderPane();
             VBox vbox1 = new VBox();
             popup1.setTitle("Generate Date Range Report");
-            
+
             Label l1 = new Label("Start Date (Year/Month/Day):");
             TextField t1 = new TextField();
             Label l2 = new Label("End Date:");
             TextField t2 = new TextField();
             Button generate = new Button("Generate Report");
-            vbox1.getChildren().addAll(l1,t1,l2,t2,generate);
-            
-           
+            vbox1.getChildren().addAll(l1, t1, l2, t2, generate);
+
+
             generate.setOnAction(new EventHandler<ActionEvent>() {
 
               @Override
               public void handle(ActionEvent arg0) {
-                
+
                 Stage tableScene = new Stage();
                 tableScene.setTitle("Date Range Report");
                 tableScene.setWidth(300);
@@ -557,30 +549,30 @@ public class Main extends Application {
 
                 Scene scene = new Scene(vbox);
                 tableScene.setScene(scene);
-                
+
                 tableScene.show();
               }
-              
+
             });
             bordPane.setCenter(vbox1);
             bordPane.setPadding(new Insets(20));
-            Scene s1 = new Scene(bordPane , 200,200);
+            Scene s1 = new Scene(bordPane, 200, 200);
             popup1.setScene(s1);
             popup1.show();
           }
-          
+
         });
-        
-        Scene scene = new Scene(bPane, 200,200);
+
+        Scene scene = new Scene(bPane, 200, 200);
         popup.setScene(scene);
         popup.show();
-        
+
       }
-      
+
     });
-    
+
     hbox.getChildren().addAll(addData, readData, report);
-    
+
     Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
 
@@ -590,11 +582,12 @@ public class Main extends Application {
     primaryStage.setScene(mainScene);
     primaryStage.show();
   }
-  
-  
-  
+
+
+
   /**
    * Milk node to store into data frame nodes
+   * 
    * @author harshak
    *
    */
@@ -602,63 +595,61 @@ public class Main extends Application {
     private SimpleStringProperty date;
     private SimpleStringProperty farmID;
     private SimpleStringProperty milkWeight;
- 
-    MilkNode(List<String> list){
+
+    MilkNode(List<String> list) {
       this.date = new SimpleStringProperty(list.get(0));
       this.farmID = new SimpleStringProperty(list.get(1));
       this.milkWeight = new SimpleStringProperty(list.get(2));
-      
+
     }
-    
+
     public String getDate() {
       return date.get();
     }
-    
+
     public String getFarmID() {
       return farmID.get();
     }
-    
+
     public String getMilkWeight() {
       return milkWeight.get();
     }
-    
-    
+
+
   }
-  
+
   /**
    * Milk stats for generating data
    *
    */
-  
-  //my edit
+
+  // my edit
   public class MilkStats {
     private SimpleStringProperty item1;
     private SimpleStringProperty item2;
     private SimpleStringProperty item3;
-        
-    MilkStats(List<String> list){
+
+    MilkStats(List<String> list) {
       this.item1 = new SimpleStringProperty(list.get(0));
       this.item2 = new SimpleStringProperty(list.get(1));
       this.item3 = new SimpleStringProperty(list.get(2));
-      
+
     }
-    
+
     public String getItem1() {
       return item1.get();
     }
-    
+
     public String getItem2() {
       return item2.get();
     }
-    
+
     public String getItem3() {
       return item3.get();
     }
-    
-    
+
+
   }
-  
-  
 
   /**
    * @param args
@@ -667,9 +658,7 @@ public class Main extends Application {
     launch(args);
   }
 
-  
+
 }
-
-
 
 
