@@ -283,6 +283,101 @@ public class MilkManager {
     }
     return list;
   }
+  
+  /**
+   * Generates DateRangeReport
+   * 
+   * @param year     - Start Year
+   * @param month    - Start Month
+   * @param day      - Start Day
+   * @param endYear  - End Day
+   * @param endMonth - End Month
+   * @param endDay   - End Day
+   * @return
+   */
+  public List<List<String>> generateDateRangeReport(int year, int month, int day, int endYear,
+      int endMonth, int endDay) {
+    List<List<String>> dateRange = generateDateRange(year, month, day, endYear, endMonth, endDay);
+    List<String> fList = new ArrayList<String>();
+    List<List<String>> report = new ArrayList<List<String>>();
+    double grandTotal = 0.0;
+
+    for (int i = 0; i < dateRange.size(); i++) {
+      if (fList.contains(dateRange.get(i).get(1)) == false) {
+        fList.add(dateRange.get(i).get(1));
+      }
+    }
+    for (int i = 0; i < fList.size(); i++) {
+      grandTotal = grandTotal + getTotalMilkWeightRange(fList.get(i), dateRange);
+    }
+
+    for (int i = 0; i < fList.size(); i++) {
+      List<String> list = new ArrayList<String>();
+      int tWeight = getTotalMilkWeightRange(fList.get(i), dateRange);
+      double pWeight = Math.round((tWeight / grandTotal) * 100);
+
+      list.add(fList.get(i));
+      list.add(Integer.toString(tWeight));
+      list.add(pWeight + "%");
+      report.add(list);
+    }
+
+    return report;
+  }
+
+  public int getTotalMilkWeightRange(String farmID, List<List<String>> data) {
+    int totalMilk = 0;
+    // MilkTable mt = milkTableListYear.get(month);
+    for (int i = 0; i < data.size(); i++) {
+      if (data.get(i).get(1).equals(farmID)) {
+        totalMilk = totalMilk + Integer.parseInt(data.get(i).get(2));
+      }
+    }
+
+    return totalMilk;
+  }
+
+  public List<List<String>> generateDateRange(int year, int month, int day, int endYear,
+      int endMonth, int endDay) {
+
+    List<List<String>> data = new ArrayList<List<String>>();
+    int ecount = endMonth;
+    int dif = endDay;
+    int dIndex = day;
+    for (int yDif = (endYear - year); yDif >= 0; yDif--) {
+      if (yDif != 0) {
+        ecount = endMonth;
+        endMonth = 12;
+      } else {
+        endMonth = ecount;
+      }
+      // System.out.println(temp.findIndex(0));
+      for (int mDif = (endMonth - month); mDif >= 0; mDif--) {
+        MilkTable temp = milkTableListMonth
+            .get(Integer.toString(endYear - yDif) + "-" + Integer.toString(endMonth - mDif));
+
+        if (temp != null) {
+          dIndex = temp.findIndex(day);
+          if (mDif != 0) {
+            dif = temp.size() - 1;
+          } else
+            dif = temp.findLastIndex(endDay);
+
+          for (int index = dIndex; index <= dif; index++) {
+            try {
+              data.add(temp.get(index));
+            } catch (KeyNotFoundException e) {
+              // e.printStackTrace();
+            }
+          }
+          day = 1;
+        }
+      }
+      month = 1;
+    }
+    return data;
+
+  }
 
 
   public static void main(String[] args) {
