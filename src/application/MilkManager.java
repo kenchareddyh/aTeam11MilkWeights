@@ -12,6 +12,16 @@ import java.util.Map;
 
 
 public class MilkManager {
+  
+  private int maxYear = 0;
+  private int minYear = 3000;
+  
+  public int getMaxYear() {
+    return maxYear;
+  }
+  public int getMinYear() {
+    return minYear;
+  }
 
   // Map that contains milkTable for corresponding year/month
   private Map<String, MilkTable> milkTableListMonth;
@@ -124,8 +134,15 @@ public class MilkManager {
     monthYearDate = arr[0] + "-" + arr[1];
     yearDate = arr[0];
     farmID = records.get(1).get(1);
+    
+    if(Integer.parseInt(yearDate) > maxYear)
+      maxYear = Integer.parseInt(yearDate);
+    if(Integer.parseInt(yearDate) < minYear) {
+      minYear = Integer.parseInt(yearDate);
+    }
 
-
+    System.out.println(maxYear);
+    System.out.println(minYear);
     System.out.println(monthYearDate);
     System.out.println(yearDate);
 
