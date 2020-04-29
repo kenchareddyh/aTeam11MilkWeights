@@ -121,6 +121,30 @@ public class MilkTable implements DataStructureADT {
     return milkList.get(index).getMilkWeight();
   }
   
+  // finds the first index given the day entered
+  public int findIndex(int day) {
+    for(int i = 0; i < milkList.size(); i++) {
+      if(milkList.get(i).getDay() == day) {
+        return i;
+      }
+    }
+    return 0;
+  }
+  
+  // finds the last index of the given day entered
+  public int findLastIndex(int day) {
+    int index = 0;
+    boolean flag = true;
+    for(int i = 0; i < milkList.size(); i++) {
+      if(milkList.get(i).getDay() == day) {
+        index = i;
+      }
+      if(flag == false && milkList.get(i).getDay() != day) {
+        break;
+      }
+    }
+    return index;
+  }
   
 
   @Override
