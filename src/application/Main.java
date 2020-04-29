@@ -226,62 +226,72 @@ public class Main extends Application {
             
             
           
-            
+            Label l = new Label("Invalid data");
             generate.setOnAction(new EventHandler<ActionEvent>() {
               
               
 
               @Override
               public void handle(ActionEvent arg0) {
-                VBox v = new VBox();
-                Stage graph = new Stage();
-                
-                
-                
-                
+                try {
+                  vbox1.getChildren().remove(l);
+                  VBox v = new VBox();
+                  Stage graph = new Stage();
                   
-                Stage tableScene = new Stage();
-                tableScene.setTitle("Table view");
-                tableScene.setWidth(300);
-                tableScene.setHeight(500);
-              
-                TableView<MilkStats> table = new TableView<MilkStats>();
-                TableColumn dateCol = new TableColumn("Date");
-                TableColumn weightCol = new TableColumn("Total Weight");
-                TableColumn percentCol = new TableColumn("Percent Weight");
-                dateCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
-                weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
-                percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
-                table.getColumns().addAll(dateCol, weightCol, percentCol);
+                  
+                  
+                  
+                    
+                  Stage tableScene = new Stage();
+                  tableScene.setTitle("Table view");
+                  tableScene.setWidth(300);
+                  tableScene.setHeight(500);
                 
-                ObservableList<MilkStats> data = FXCollections.observableArrayList();
-                
-                // get milkList with mm with given year and month
-                List<List<String>> milkList = mm.dataForAllMonths(t2.getText(), t1.getText());
-                
-                
-                
-                
-              //populate the observable list
-                for(int i = 0; i < milkList.size(); i++) {    
-                  data.add(new MilkStats(milkList.get(i)));
+                  TableView<MilkStats> table = new TableView<MilkStats>();
+                  TableColumn dateCol = new TableColumn("Date");
+                  TableColumn weightCol = new TableColumn("Total Weight");
+                  TableColumn percentCol = new TableColumn("Percent Weight");
+                  dateCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
+                  weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
+                  percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
+                  table.getColumns().addAll(dateCol, weightCol, percentCol);
+                  
+                  ObservableList<MilkStats> data = FXCollections.observableArrayList();
+                  
+                  // get milkList with mm with given year and month
+                  
+                  List<List<String>> milkList = mm.dataForAllMonths(t2.getText(), t1.getText());
+                  
+                  
+                  
+                  
+                  
+                  
+                //populate the observable list
+                  for(int i = 0; i < milkList.size(); i++) {    
+                    data.add(new MilkStats(milkList.get(i)));
+                  }
+                  
+                  
+                  table.setItems(data);
+                  
+                  
+                  
+                  VBox vBox = new VBox();
+                  vBox.setSpacing(5);
+                  vBox.setPadding(new Insets(10, 0, 0, 10));
+                  vBox.getChildren().addAll(label, table);
+
+                  Scene scene = new Scene(vBox);
+                  tableScene.setScene(scene);
+
+
+                  tableScene.show();
+                }catch(Exception e) {
+                  
+                  vbox1.getChildren().add(l);
                 }
                 
-                
-                table.setItems(data);
-                
-                
-                
-                final VBox vbox = new VBox();
-                vbox.setSpacing(5);
-                vbox.setPadding(new Insets(10, 0, 0, 10));
-                vbox.getChildren().addAll(label, table);
-
-                Scene scene = new Scene(vbox);
-                tableScene.setScene(scene);
-
-
-                tableScene.show();
            
                 
                 
@@ -313,59 +323,67 @@ public class Main extends Application {
             TextField t1 = new TextField();
             Button generate = new Button("Generate Report");
             vbox1.getChildren().addAll(l1,t1,generate);
+            
+            Label l = new Label("Invalid data");
             generate.setOnAction(new EventHandler<ActionEvent>() {
 
               @Override
               public void handle(ActionEvent arg0) {
-                VBox v = new VBox();
-                Stage graph = new Stage();
-                
-                
-                
-                
+                try {
+                  vbox1.getChildren().remove(l);
+                  VBox v = new VBox();
+                  Stage graph = new Stage();
                   
-                Stage tableScene = new Stage();
-                tableScene.setTitle("Table view");
-                tableScene.setWidth(300);
-                tableScene.setHeight(500);
-              
-                TableView<MilkStats> table = new TableView<MilkStats>();
-                TableColumn farmCol = new TableColumn("Farm ID");
-                TableColumn weightCol = new TableColumn("Total Weight");
-                TableColumn percentCol = new TableColumn("Percent Weight");
-                farmCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
-                weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
-                percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
-                table.getColumns().addAll(farmCol, weightCol, percentCol);
+                  
+                  
+                  
+                    
+                  Stage tableScene = new Stage();
+                  tableScene.setTitle("Table view");
+                  tableScene.setWidth(300);
+                  tableScene.setHeight(500);
                 
-                ObservableList<MilkStats> data = FXCollections.observableArrayList();
-                
-                // get milkList with mm with given year and month
-                List<List<String>> milkList = mm.dataForAllFarmsAnnual(t1.getText());
-                
-                
-                
-                
-              //populate the observable list
-                for(int i = 0; i < milkList.size(); i++) {    
-                  data.add(new MilkStats(milkList.get(i)));
+                  TableView<MilkStats> table = new TableView<MilkStats>();
+                  TableColumn farmCol = new TableColumn("Farm ID");
+                  TableColumn weightCol = new TableColumn("Total Weight");
+                  TableColumn percentCol = new TableColumn("Percent Weight");
+                  farmCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
+                  weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
+                  percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
+                  table.getColumns().addAll(farmCol, weightCol, percentCol);
+                  
+                  ObservableList<MilkStats> data = FXCollections.observableArrayList();
+                  
+                  // get milkList with mm with given year and month
+                  List<List<String>> milkList = mm.dataForAllFarmsAnnual(t1.getText());
+                  
+                  
+                  
+                  
+                //populate the observable list
+                  for(int i = 0; i < milkList.size(); i++) {    
+                    data.add(new MilkStats(milkList.get(i)));
+                  }
+                  
+                  
+                  table.setItems(data);
+                  
+                  
+                  
+                  final VBox vbox = new VBox();
+                  vbox.setSpacing(5);
+                  vbox.setPadding(new Insets(10, 0, 0, 10));
+                  vbox.getChildren().addAll(label, table);
+
+                  Scene scene = new Scene(vbox);
+                  tableScene.setScene(scene);
+
+
+                  tableScene.show();
+                  
+                }catch(Exception e) {
+                  vbox1.getChildren().add(l);
                 }
-                
-                
-                table.setItems(data);
-                
-                
-                
-                final VBox vbox = new VBox();
-                vbox.setSpacing(5);
-                vbox.setPadding(new Insets(10, 0, 0, 10));
-                vbox.getChildren().addAll(label, table);
-
-                Scene scene = new Scene(vbox);
-                tableScene.setScene(scene);
-
-
-                tableScene.show();
                 
                 
                 
@@ -398,59 +416,67 @@ public class Main extends Application {
             Button generate = new Button("Generate Report");
             vbox1.getChildren().addAll(l1,t1,l2,t2,generate);
             bordPane.setCenter(vbox1);
+            
+            Label l = new Label("Invalid data");
             generate.setOnAction(new EventHandler<ActionEvent>() {
 
               @Override
               public void handle(ActionEvent arg0) {
-                VBox v = new VBox();
-                Stage graph = new Stage();
-                
-                
-                
-                
+                try {
+                  vbox1.getChildren().remove(l);
+                  VBox v = new VBox();
+                  Stage graph = new Stage();
                   
-                Stage tableScene = new Stage();
-                tableScene.setTitle("Table view");
-                tableScene.setWidth(300);
-                tableScene.setHeight(500);
-              
-                TableView<MilkStats> table = new TableView<MilkStats>();
-                TableColumn farmCol = new TableColumn("Farm ID");
-                TableColumn weightCol = new TableColumn("Total Weight");
-                TableColumn percentCol = new TableColumn("Percent Weight");
-                farmCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
-                weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
-                percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
-                table.getColumns().addAll(farmCol, weightCol, percentCol);
+                  
+                  
+                  
+                    
+                  Stage tableScene = new Stage();
+                  tableScene.setTitle("Table view");
+                  tableScene.setWidth(300);
+                  tableScene.setHeight(500);
                 
-                ObservableList<MilkStats> data = FXCollections.observableArrayList();
-                
-                // get milkList with mm with given year and month
-                List<List<String>> milkList = mm.dataForAllFarmsMonthly(t1.getText(), t2.getText());
-                
-                
-                
-                
-              //populate the observable list
-                for(int i = 0; i < milkList.size(); i++) {    
-                  data.add(new MilkStats(milkList.get(i)));
+                  TableView<MilkStats> table = new TableView<MilkStats>();
+                  TableColumn farmCol = new TableColumn("Farm ID");
+                  TableColumn weightCol = new TableColumn("Total Weight");
+                  TableColumn percentCol = new TableColumn("Percent Weight");
+                  farmCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item1"));
+                  weightCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item2"));
+                  percentCol.setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
+                  table.getColumns().addAll(farmCol, weightCol, percentCol);
+                  
+                  ObservableList<MilkStats> data = FXCollections.observableArrayList();
+                  
+                  // get milkList with mm with given year and month
+                  List<List<String>> milkList = mm.dataForAllFarmsMonthly(t1.getText(), t2.getText());
+                  
+                  
+                  
+                  
+                //populate the observable list
+                  for(int i = 0; i < milkList.size(); i++) {    
+                    data.add(new MilkStats(milkList.get(i)));
+                  }
+                  
+                  
+                  table.setItems(data);
+                  
+                  
+                  
+                  final VBox vbox = new VBox();
+                  vbox.setSpacing(5);
+                  vbox.setPadding(new Insets(10, 0, 0, 10));
+                  vbox.getChildren().addAll(label, table);
+
+                  Scene scene = new Scene(vbox);
+                  tableScene.setScene(scene);
+
+
+                  tableScene.show();
+                }catch(Exception e) {
+                  vbox1.getChildren().add(l);
                 }
                 
-                
-                table.setItems(data);
-                
-                
-                
-                final VBox vbox = new VBox();
-                vbox.setSpacing(5);
-                vbox.setPadding(new Insets(10, 0, 0, 10));
-                vbox.getChildren().addAll(label, table);
-
-                Scene scene = new Scene(vbox);
-                tableScene.setScene(scene);
-
-
-                tableScene.show();
               }
               
             });
@@ -477,6 +503,8 @@ public class Main extends Application {
             TextField t2 = new TextField();
             Button generate = new Button("Generate Report");
             vbox1.getChildren().addAll(l1,t1,l2,t2,generate);
+            
+           
             generate.setOnAction(new EventHandler<ActionEvent>() {
 
               @Override

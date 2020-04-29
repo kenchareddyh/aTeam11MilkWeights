@@ -137,10 +137,35 @@ public class MilkManager {
    * @param farmID the farm
    * @return total milk weight of the farm in a month
    */
-  public int getTotalMilkWeight(String value, String farmID) {
-    int totalMilk = 0;
-    MilkTable mt = milkTableListMonth.get(value);
-    if (mt != null) {
+  public int getTotalMilkWeight(String value, String farmID) throws Exception {
+    try {
+      int totalMilk = 0;
+      MilkTable mt = milkTableListMonth.get(value);
+      if (mt != null) {
+        for (int i = 0; i < mt.size(); i++) {
+
+          if (mt.getFarmId(i).equals(farmID)) {
+
+            totalMilk = totalMilk + mt.getMilkWeight(i);
+          }
+        }
+      }
+
+
+      return totalMilk;
+    
+    }catch(Exception e) {
+      throw new Exception();
+    }
+  }
+    
+
+  // my method
+  // returns total weight for a certain year
+  public int getTotalMilkWeightYear(String value, String farmID) throws Exception {
+    try {
+      int totalMilk = 0;
+      MilkTable mt = milkTableListYear.get(value);
       for (int i = 0; i < mt.size(); i++) {
 
         if (mt.getFarmId(i).equals(farmID)) {
@@ -148,26 +173,12 @@ public class MilkManager {
           totalMilk = totalMilk + mt.getMilkWeight(i);
         }
       }
+
+      return totalMilk;
+    }catch(Exception e) {
+      throw new Exception();
     }
-
-
-    return totalMilk;
-  }
-
-  // my method
-  // returns total weight for a certain year
-  public int getTotalMilkWeightYear(String value, String farmID) {
-    int totalMilk = 0;
-    MilkTable mt = milkTableListYear.get(value);
-    for (int i = 0; i < mt.size(); i++) {
-
-      if (mt.getFarmId(i).equals(farmID)) {
-
-        totalMilk = totalMilk + mt.getMilkWeight(i);
-      }
-    }
-
-    return totalMilk;
+    
   }
 
 
@@ -178,55 +189,70 @@ public class MilkManager {
    * @param farmID the farm id
    * @return the percentage
    */
-  public double getPercentMilkWeight(String value, String farmID) {
-    double total = (double) getTotalMilkWeight(value, farmID);
-    double grandTotal = 0.0;
-    MilkTable mt = milkTableListMonth.get(value);
+  public double getPercentMilkWeight(String value, String farmID) throws Exception{
+    try {
+      double total = (double) getTotalMilkWeight(value, farmID);
+      double grandTotal = 0.0;
+      MilkTable mt = milkTableListMonth.get(value);
 
-    if (mt != null) {
-      for (int i = 0; i < mt.size(); i++) {
-        grandTotal = grandTotal + mt.getMilkWeight(i);
+      if (mt != null) {
+        for (int i = 0; i < mt.size(); i++) {
+          grandTotal = grandTotal + mt.getMilkWeight(i);
+        }
       }
+      return (total / grandTotal) * 100;
+    }catch(Exception e) {
+      throw new Exception();
     }
-    return (total / grandTotal) * 100;
+    
   }
 
   // my method
   // equivalent for year
-  public double getPercentMilkWeightYear(String value, String farmID) {
-    double total = (double) getTotalMilkWeightYear(value, farmID);
-    double grandTotal = 0.0;
-    MilkTable mt = milkTableListYear.get(value);
-    for (int i = 0; i < mt.size(); i++) {
-      grandTotal = grandTotal + mt.getMilkWeight(i);
-    }
+  public double getPercentMilkWeightYear(String value, String farmID) throws Exception{
+    try {
+      double total = (double) getTotalMilkWeightYear(value, farmID);
+      double grandTotal = 0.0;
+      MilkTable mt = milkTableListYear.get(value);
+      for (int i = 0; i < mt.size(); i++) {
+        grandTotal = grandTotal + mt.getMilkWeight(i);
+      }
 
-    return (total / grandTotal) * 100;
+      return (total / grandTotal) * 100;
+    }catch(Exception e) {
+      throw new Exception();
+    }
+    
   }
 
   // david
-  public List<List<String>> dataForAllMonths(String year, String farmID) {
-    List<List<String>> list = new ArrayList<List<String>>();
-    for (Map.Entry mapElement : milkTableListMonth.entrySet()) {
-      String key = (String) mapElement.getKey();
-      System.out.println("its true");
-      List<String> subList = new ArrayList<String>();
-      subList.add(key);
-      subList.add(getTotalMilkWeight(key, farmID) + "");
-      subList
-          .add(Double.toString(getPercentMilkWeight(key, farmID)).substring(0, 5)
-              + "%");
-      System.out.println(subList);
-      list.add(subList);
-    }
+  public List<List<String>> dataForAllMonths(String year, String farmID) throws Exception {
+    try {
+      List<List<String>> list = new ArrayList<List<String>>();
+      for (Map.Entry mapElement : milkTableListMonth.entrySet()) {
+        String key = (String) mapElement.getKey();
+        System.out.println("its true");
+        List<String> subList = new ArrayList<String>();
+        subList.add(key);
+        subList.add(getTotalMilkWeight(key, farmID) + "");
+        subList
+            .add(Double.toString(getPercentMilkWeight(key, farmID)).substring(0, 5)
+                + "%");
+        System.out.println(subList);
+        list.add(subList);
+      }
 
-  return list;
+      return list;
+    }catch(Exception e) {
+      throw new Exception();
+    }
+    
 
   }
   // my method
   // all farms
 
-  public List<List<String>> dataForAllFarmsAnnual(String year) {
+  public List<List<String>> dataForAllFarmsAnnual(String year) throws Exception {
     List<List<String>> list = new ArrayList<List<String>>();
     for (int i = 0; i < farmList.size(); i++) {
       List<String> subList = new ArrayList<String>();
@@ -242,7 +268,7 @@ public class MilkManager {
   }
 
   // my method 2
-  public List<List<String>> dataForAllFarmsMonthly(String year, String month) {
+  public List<List<String>> dataForAllFarmsMonthly(String year, String month) throws Exception {
     List<List<String>> list = new ArrayList<List<String>>();
     for (int i = 0; i < farmList.size(); i++) {
       List<String> subList = new ArrayList<String>();
@@ -266,7 +292,7 @@ public class MilkManager {
     mm.getYearMonth("2019-1");
 
 
-    mm.getTotalMilkWeight("2019-1", "Farm 0");
+    //mm.getTotalMilkWeight("2019-1", "Farm 0");
   }
 
 
