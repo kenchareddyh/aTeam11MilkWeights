@@ -47,9 +47,10 @@ public class MilkManager {
   public List<List<String>> getYearMonth(String value) {
     List<List<String>> list = new ArrayList<List<String>>();
 
+    // if the key exists in HashMap return the corresponding milktable for that key
     if (milkTableListMonth.containsKey(value)) {
       MilkTable mt = milkTableListMonth.get(value);
-      for (int i = 0; i < mt.numKeys(); i++) {
+      for (int i = 0; i < mt.size(); i++) {
         try {
           list.add(mt.get(i));
         } catch (KeyNotFoundException e) {
@@ -86,6 +87,7 @@ public class MilkManager {
       String line;
       try {
         while ((line = csvReader.readLine()) != null) {
+          // split table into rows and add each row to records
           String[] values = line.split(",");
           records.add(Arrays.asList(values));
         }
@@ -101,8 +103,10 @@ public class MilkManager {
     // create a milktable for the data
     for (int i = 1; i < records.size(); i++) {
       try {
+        // insert each row into a milkTable
         milkTable.insert(records.get(i));
         if (!farmList.contains(records.get(i).get(1))) {
+          // insert unique farm_id in farmList
           farmList.add(records.get(i).get(1));
         }
 
@@ -115,6 +119,7 @@ public class MilkManager {
     System.out.println("records:" + records.get(1).get(0));
 
 
+    // create two keys, year/month and month
     String[] arr = records.get(1).get(0).split("-");
     monthYearDate = arr[0] + "-" + arr[1];
     yearDate = arr[0];
@@ -124,6 +129,7 @@ public class MilkManager {
     System.out.println(monthYearDate);
     System.out.println(yearDate);
 
+    // store the key and the milkTable as its value in two hashmaps
     milkTableListMonth.put(monthYearDate, milkTable);
     milkTableListYear.put(yearDate, milkTable);
 
@@ -153,12 +159,12 @@ public class MilkManager {
 
 
       return totalMilk;
-    
-    }catch(Exception e) {
+
+    } catch (Exception e) {
       throw new Exception();
     }
   }
-    
+
 
   // my method
   // returns total weight for a certain year
@@ -175,10 +181,10 @@ public class MilkManager {
       }
 
       return totalMilk;
-    }catch(Exception e) {
+    } catch (Exception e) {
       throw new Exception();
     }
-    
+
   }
 
 
@@ -189,7 +195,7 @@ public class MilkManager {
    * @param farmID the farm id
    * @return the percentage
    */
-  public double getPercentMilkWeight(String value, String farmID) throws Exception{
+  public double getPercentMilkWeight(String value, String farmID) throws Exception {
     try {
       double total = (double) getTotalMilkWeight(value, farmID);
       double grandTotal = 0.0;
@@ -201,15 +207,15 @@ public class MilkManager {
         }
       }
       return (total / grandTotal) * 100;
-    }catch(Exception e) {
+    } catch (Exception e) {
       throw new Exception();
     }
-    
+
   }
 
   // my method
   // equivalent for year
-  public double getPercentMilkWeightYear(String value, String farmID) throws Exception{
+  public double getPercentMilkWeightYear(String value, String farmID) throws Exception {
     try {
       double total = (double) getTotalMilkWeightYear(value, farmID);
       double grandTotal = 0.0;
@@ -219,10 +225,10 @@ public class MilkManager {
       }
 
       return (total / grandTotal) * 100;
-    }catch(Exception e) {
+    } catch (Exception e) {
       throw new Exception();
     }
-    
+
   }
 
   // david
@@ -235,18 +241,16 @@ public class MilkManager {
         List<String> subList = new ArrayList<String>();
         subList.add(key);
         subList.add(getTotalMilkWeight(key, farmID) + "");
-        subList
-            .add(Double.toString(getPercentMilkWeight(key, farmID)).substring(0, 5)
-                + "%");
+        subList.add(Double.toString(getPercentMilkWeight(key, farmID)).substring(0, 5) + "%");
         System.out.println(subList);
         list.add(subList);
       }
 
       return list;
-    }catch(Exception e) {
+    } catch (Exception e) {
       throw new Exception();
     }
-    
+
 
   }
   // my method
@@ -283,7 +287,7 @@ public class MilkManager {
     }
     return list;
   }
-  
+
   /**
    * Generates DateRangeReport
    * 
@@ -325,6 +329,13 @@ public class MilkManager {
     return report;
   }
 
+  /**
+   * Gets totalMilkWeight from farmID in a given range of data
+   * 
+   * @param farmID
+   * @param data
+   * @return
+   */
   public int getTotalMilkWeightRange(String farmID, List<List<String>> data) {
     int totalMilk = 0;
     // MilkTable mt = milkTableListYear.get(month);
@@ -337,6 +348,17 @@ public class MilkManager {
     return totalMilk;
   }
 
+  /**
+   * Generates list with required data in a given dateRange
+   * 
+   * @param year
+   * @param month
+   * @param day
+   * @param endYear
+   * @param endMonth
+   * @param endDay
+   * @return
+   */
   public List<List<String>> generateDateRange(int year, int month, int day, int endYear,
       int endMonth, int endDay) {
 
@@ -344,25 +366,30 @@ public class MilkManager {
     int ecount = endMonth;
     int dif = endDay;
     int dIndex = day;
+    // iterate from start to end year
     for (int yDif = (endYear - year); yDif >= 0; yDif--) {
+      // if year != endyear set endMonth to 12 for current iteration
       if (yDif != 0) {
         ecount = endMonth;
         endMonth = 12;
       } else {
         endMonth = ecount;
       }
-      // System.out.println(temp.findIndex(0));
+      // iterate from start month to endMonth
       for (int mDif = (endMonth - month); mDif >= 0; mDif--) {
+        // get the milktable for the current yeat/month
         MilkTable temp = milkTableListMonth
             .get(Integer.toString(endYear - yDif) + "-" + Integer.toString(endMonth - mDif));
 
         if (temp != null) {
           dIndex = temp.findIndex(day);
+          // if month != endMonth set the endMonth to size of the list
           if (mDif != 0) {
             dif = temp.size() - 1;
           } else
             dif = temp.findLastIndex(endDay);
 
+          // iterate through milkTable and add entries to data
           for (int index = dIndex; index <= dif; index++) {
             try {
               data.add(temp.get(index));
@@ -370,9 +397,11 @@ public class MilkManager {
               // e.printStackTrace();
             }
           }
+          // reset to first day
           day = 1;
         }
       }
+      // reset to first month 
       month = 1;
     }
     return data;
@@ -383,11 +412,17 @@ public class MilkManager {
   public static void main(String[] args) {
     MilkManager mm = new MilkManager();
     String file = "//Users/harshak/eclipse-workspace/milkWeigths/csv/small/2019-1.csv";
+    String file2 = "//Users/harshak/eclipse-workspace/milkWeigths/csv/small/2019-2.csv";
     mm.milkParser(file);
+    mm.milkParser(file2);
     mm.getYearMonth("2019-1");
 
 
-    //mm.getTotalMilkWeight("2019-1", "Farm 0");
+    // mm.getTotalMilkWeight("2019-1", "Farm 0");
+    System.out.println(mm.generateDateRange(2019, 1, 1, 2019, 1, 10));
+    System.out.println(mm.generateDateRangeReport(2019, 1, 1, 2019, 1, 10));
+
+    System.out.println(mm.generateDateRangeReport(2019, 1, 20, 2019, 2, 20));
   }
 
 
