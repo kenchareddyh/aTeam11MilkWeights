@@ -264,6 +264,7 @@ public class Main extends Application {
                   });
 
                   TableView<MilkStats> table = new TableView<MilkStats>();
+
                   TableColumn dateCol = new TableColumn("Date");
                   TableColumn weightCol = new TableColumn("Total Weight");
                   TableColumn percentCol = new TableColumn("Percent Weight");
@@ -293,7 +294,9 @@ public class Main extends Application {
                   VBox vBox = new VBox();
                   vBox.setSpacing(5);
                   vBox.setPadding(new Insets(10, 0, 0, 10));
-                  vBox.getChildren().addAll(label, table, back);
+                  Label title = new Label(t2.getText() + " " + t1.getText() + " Milk Weights");
+
+                  vBox.getChildren().addAll(title, table, back);
 
                   Scene scene = new Scene(vBox);
                   previousScene.push(primaryStage.getScene());
@@ -399,7 +402,9 @@ public class Main extends Application {
                   final VBox vbox = new VBox();
                   vbox.setSpacing(5);
                   vbox.setPadding(new Insets(10, 0, 0, 10));
-                  vbox.getChildren().addAll(label, table, back);
+
+                  Label title = new Label(t1.getText() + " Milk Weights");
+                  vbox.getChildren().addAll(title, table, back);
 
                   Scene scene = new Scene(vbox);
                   previousScene.push(primaryStage.getScene());
@@ -497,7 +502,8 @@ public class Main extends Application {
                   final VBox vbox = new VBox();
                   vbox.setSpacing(5);
                   vbox.setPadding(new Insets(10, 0, 0, 10));
-                  vbox.getChildren().addAll(label, table, back);
+                  Label title = new Label(t1.getText() + "-" + t2.getText() + " Milk Weights");
+                  vbox.getChildren().addAll(title, table, back);
 
                   Scene scene = new Scene(vbox);
                   previousScene.push(primaryStage.getScene());
@@ -568,13 +574,19 @@ public class Main extends Application {
                   String[] startArr = startDate.split("/");
                   String[] endArr = endDate.split("/");
 
-                  // get milkList with mm with given year and month
-                  milkList = mm.generateDateRangeReport(Integer.parseInt(startArr[0]),
-                      Integer.parseInt(startArr[1]), Integer.parseInt(startArr[2]),
-                      Integer.parseInt(endArr[0]), Integer.parseInt(endArr[1]),
-                      Integer.parseInt(endArr[2]));
-                  
-                  
+                  if (Integer.parseInt(startArr[0] + startArr[1] + startArr[2]) > Integer
+                      .parseInt(endArr[0] + endArr[1] + endArr[2])) {
+                    throw new Exception();
+                  }
+
+
+                    // get milkList with mm with given year and month
+                    milkList = mm.generateDateRangeReport(Integer.parseInt(startArr[0]),
+                        Integer.parseInt(startArr[1]), Integer.parseInt(startArr[2]),
+                        Integer.parseInt(endArr[0]), Integer.parseInt(endArr[1]),
+                        Integer.parseInt(endArr[2]));
+
+
 
                   // populate the observable list
                   for (int i = 0; i < milkList.size(); i++) {
@@ -596,12 +608,14 @@ public class Main extends Application {
                       primaryStage.setScene(previousScene.pop());
                     }
                   });
-                  vbox.getChildren().addAll(label, table, back);
+
+                  Label title = new Label(t1.getText() + "-" + t2.getText() + " Milk Weights");
+                  vbox.getChildren().addAll(title, table, back);
 
                   Scene scene = new Scene(vbox);
                   previousScene.push(primaryStage.getScene());
                   primaryStage.setScene(scene);
-                  
+
                 } catch (Exception e) {
                   vbox1.getChildren().add(l);
                 }
@@ -723,6 +737,4 @@ public class Main extends Application {
 
 
 }
-
-
 
