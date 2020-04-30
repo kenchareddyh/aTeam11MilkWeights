@@ -1,5 +1,6 @@
 package application;
 
+import javafx.scene.control.Label;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -9,19 +10,42 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javafx.scene.Scene;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
+
 
 
 public class MilkManager {
 
+  //the maximum year
   private int maxYear = 0;
+  
+  //the minmum year
   private int minYear = 3000;
+  
+  // flag for if data is added
+  private boolean flag = false;
 
+  
+  /**
+   * method that returns the max year
+   * @return the max year
+   */
   public int getMaxYear() {
     return maxYear;
   }
 
+  /**
+   * method that returns the min year
+   * @return the min year
+   */
   public int getMinYear() {
     return minYear;
+  }
+  
+  public boolean getFlag() {
+    return flag;
   }
 
   // Map that contains milkTable for corresponding year/month
@@ -29,7 +53,7 @@ public class MilkManager {
 
   private MilkTable milkTable;
 
-  // addition
+  // A list of FarmIDs
   private List<String> farmList;
 
 
@@ -41,9 +65,9 @@ public class MilkManager {
    */
   public MilkManager() {
 
+    // initializing the milkTableListMonth, milkTableListYear and the farmList
     milkTableListMonth = new HashMap<String, MilkTable>();
     milkTableListYear = new HashMap<String, MilkTable>();
-    // addition
     farmList = new ArrayList<>();
   }
 
@@ -83,7 +107,7 @@ public class MilkManager {
    * 
    * @param file
    */
-  public void milkParser(String file) {
+  public boolean milkParser(String file) {
     String monthYearDate;
     String yearDate;
     String farmID;
@@ -96,11 +120,73 @@ public class MilkManager {
     try {
       BufferedReader csvReader = new BufferedReader(new FileReader(file));
       String line;
+      int count = 0;
       try {
         while ((line = csvReader.readLine()) != null) {
           // split table into rows and add each row to records
           String[] values = line.split(",");
-          records.add(Arrays.asList(values));
+          
+          //start of checking for invalid file input
+          //checks to make sure it is not the first row
+          if(count!=0) {
+            
+          //checks if there are only 3 columns
+            if(values.length<3) {
+              //create popup error saying missing data
+              createPopup("File has missing data. Not been accepted");
+              return false;
+            }
+            if(values.length>3) {
+              //create popup error saying excess data
+              createPopup("File has excess data. Not been accepted");
+              return false;
+            }
+            
+            //to check the date
+            String[] dateSplit = values[0].split("-");
+            
+            //might have to check if its null after split
+            
+            // checking if the format is right
+            if(dateSplit.length!=3) {
+              //create popup date format wrong
+              createPopup("File has wrong date format. Not been accepted");
+              return false;
+            }
+            
+            //checks if each part of the date is in number format
+            for(int i =0;i<3;i++) {
+              try {
+                //to check if it can be converted to an integer or not
+                Integer.parseInt(dateSplit[i]);
+              }
+              catch(Exception e) {
+                //create a popup coz date has characters other than numbers and dashes
+                System.out.println("length");
+                createPopup("File has wrong date format. Not been accepted");
+                return false;
+              }
+            }
+            
+            //checks if the weight is in number format
+            try {
+              //to check if it can be converted into an integer or not
+              Integer.parseInt(values[2]);
+            }
+            catch(Exception e2) {
+              //not sure which exception to catch
+              //create a popup coz weight has characters other than nurmbers
+              createPopup("File has characters other than numbers for weight. Not been accepted");
+              return false;
+            }
+            
+            //error handling end
+          }
+          
+          
+          records.add(Arrays.asList(values));         
+          //incrementing counter to show which row it is at
+          count++;
         }
         csvReader.close();
         System.out.println(records);
@@ -124,6 +210,7 @@ public class MilkManager {
       } catch (IllegalNullKeyException e) {
         e.printStackTrace();
       }
+      
     }
 
 
@@ -142,6 +229,7 @@ public class MilkManager {
       minYear = Integer.parseInt(yearDate);
     }
 
+    //i think we need to remove these
     System.out.println(maxYear);
     System.out.println(minYear);
     System.out.println(monthYearDate);
@@ -151,6 +239,10 @@ public class MilkManager {
     milkTableListMonth.put(monthYearDate, milkTable);
     milkTableListYear.put(yearDate, milkTable);
 
+    // set flag to true if file was succesfully parsed
+    flag = true;
+    //returns true if no errors occurred and parsed through the csv file succesfully
+    return true;
 
   }
 
@@ -184,8 +276,13 @@ public class MilkManager {
   }
 
 
-  // my method
-  // returns total weight for a certain year
+  /**
+   * get the total milk weight of a certain farm in a certain year
+   * 
+   * @param value  the year
+   * @param farmID the farm
+   * @return total milk weight of the farm in a year
+   */
   public int getTotalMilkWeightYear(String value, String farmID) throws Exception {
     try {
       int totalMilk = 0;
@@ -231,8 +328,15 @@ public class MilkManager {
 
   }
 
-  // my method
-  // equivalent for year
+ 
+  /**
+   * gets the percent of the total milk weight that a certain farm produced over a certain year
+   * 
+   * @param value - the year
+   * @param farmID - the farm id
+   * @return the percentage
+   * @throws Exception
+   */
   public double getPercentMilkWeightYear(String value, String farmID) throws Exception {
     try {
       double total = (double) getTotalMilkWeightYear(value, farmID);
@@ -271,9 +375,9 @@ public class MilkManager {
 
 
   }
-  // my method
-  // all farms
+  
 
+  //for annual report
   public List<List<String>> dataForAllFarmsAnnual(String year) throws Exception {
     List<List<String>> list = new ArrayList<List<String>>();
     for (int i = 0; i < farmList.size(); i++) {
@@ -289,7 +393,7 @@ public class MilkManager {
     return list;
   }
 
-  // my method 2
+  // for monthly report
   public List<List<String>> dataForAllFarmsMonthly(String year, String month) throws Exception {
     List<List<String>> list = new ArrayList<List<String>>();
     for (int i = 0; i < farmList.size(); i++) {
@@ -436,6 +540,19 @@ public class MilkManager {
     }
     return data;
 
+  }
+  
+  /**
+   * Method that generates a popup with only the message parameter as a message
+   * 
+   * @param message ' the text to be displayed on the popup
+   */
+  public void createPopup(String message) {
+    Stage popup = new Stage();
+    Label msg = new Label(message);
+    Scene scene = new Scene(msg, 500,100);
+    popup.setScene(scene);
+    popup.show();
   }
 
 

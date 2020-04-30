@@ -1,5 +1,7 @@
 package application;
 
+
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -39,22 +41,42 @@ public class MilkTable implements DataStructureADT {
       this.day = Integer.parseInt(arr[2]);
     }
     
+    /**
+     * Returns the farmID
+     * @return the farmID
+     */
     private String getFarmId() {
       return farm_id;
     }
     
+    /**
+     * Returns the milkWeight
+     * @return the milkWeight
+     */
     private int getMilkWeight() {
       return milkWeight;
     }
     
+    /**
+     * Returns the Year
+     * @return the year
+     */
     private int getYear() {
       return year;
     }
     
+    /**
+     * Returns the Month
+     * @return the month
+     */
     private int getMonth() {
       return month;
     }
     
+    /**
+     * Returns the Day
+     * @return the day
+     */
     private int getDay() {
       return day;
     }
@@ -62,16 +84,14 @@ public class MilkTable implements DataStructureADT {
     
   }
   
+  /**
+   * Constructor for the MilkTable class
+   */
   public MilkTable() {
     milkList = new LinkedList<MilkData>();
     count = 0;
   }
   
-  @Override
-  public int numKeys() {
-    // TODO Auto-generated method stub
-    return count;
-  }
 
   @Override
   public void insert(List<String> data) throws IllegalNullKeyException {
@@ -102,6 +122,12 @@ public class MilkTable implements DataStructureADT {
     
   }
   
+  /**
+   * Returns the FarmID at a certain index
+   * 
+   * @param index - index of the data
+   * @return the FarmID at a certain index
+   */
   public String getFarmId(int index) {
     return milkList.get(index).getFarmId();
   }
@@ -113,6 +139,7 @@ public class MilkTable implements DataStructureADT {
     
   }
   
+  @Override
   public int size() {
     return milkList.size();
   }
@@ -147,15 +174,4 @@ public class MilkTable implements DataStructureADT {
   }
   
 
-  @Override
-  public boolean remove(String node) throws IllegalNullKeyException {
-    // TODO Auto-generated method stub
-    if(node == null) {
-      throw new IllegalNullKeyException();
-    }
-    
-    return false;
-  }
 }
-
-  
