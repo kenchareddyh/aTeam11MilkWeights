@@ -361,8 +361,23 @@ public class Main extends Application {
                     // get milkList with mm with given year and month
 
                     List<List<String>> milkList = mm.dataForAllMonths(t2.getText(), t1.getText());
-
-
+                    
+                    //sort milkList
+                    for(int i = 1; i < milkList.size(); i++) {
+                      String[] arr = milkList.get(i).get(0).split("-");
+                      int ikey = Integer.parseInt(arr[0] + arr[1]);
+                      List<String> keyString = milkList.get(i);
+                      
+                      int j = i - 1;
+                      String[] arr2 = milkList.get(j).get(0).split("-");
+                      int jkey = Integer.parseInt(arr2[0] + arr2[1]);
+                      
+                      while(j >= 0 && jkey > ikey) {
+                        milkList.set((j + 1), milkList.get(j));
+                        j = j - 1;
+                      }
+                      milkList.set((j+1), keyString);
+                    }
 
                     // populate the observable list
                     for (int i = 0; i < milkList.size(); i++) {
