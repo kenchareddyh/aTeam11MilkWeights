@@ -14,6 +14,9 @@ Which team members were on same xteam together?
 
 Harsha Kenchareddy, Daniel Ye, David Yin
 
-Other notes or comments to the grader:
+Things to do:
+ - create the data structure
+ - create manager for data structure
+ - create the main class that displays data struture
 
  
