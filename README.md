@@ -24,6 +24,7 @@ Things to do:
       - create and finish add data
       - create and finish read data
       - create and finish generate report
+      - create a file output of the data
 
 
 Bug reports:
