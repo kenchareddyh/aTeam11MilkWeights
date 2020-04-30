@@ -385,7 +385,12 @@ public class Main extends Application {
                   } catch (Exception e) {
                     // If there was an error due to invalid input Displays a label saying input was
                     // invalid
-                    vbox1.getChildren().add(l);
+                    try {
+                      vbox1.getChildren().add(l);
+                    }catch(Exception a) {
+                      
+                    }
+                    
                   }
 
 
@@ -507,7 +512,11 @@ public class Main extends Application {
                   } catch (Exception e) {
                     // If there was an error with the input data adds a label to signify that the
                     // input was invalid
-                    vbox1.getChildren().add(l);
+                    try {
+                      vbox1.getChildren().add(l);
+                    }catch(Exception a) {
+                      
+                    }
                   }
 
 
@@ -624,7 +633,11 @@ public class Main extends Application {
                   } catch (Exception e) {
                     // If there was an error due to the input values adds a label to signify that
                     // the input was invalid
-                    vbox1.getChildren().add(l);
+                    try {
+                      vbox1.getChildren().add(l);
+                    }catch(Exception a) {
+                      
+                    }
                   }
 
                 }
@@ -742,7 +755,11 @@ public class Main extends Application {
                   } catch (Exception e) {
                     // if there was an error due to the input data adds a label to signify that the
                     // input data was invalid
-                    vbox1.getChildren().add(l);
+                    try {
+                      vbox1.getChildren().add(l);
+                    }catch(Exception a) {
+                      
+                    }
                   }
 
 
