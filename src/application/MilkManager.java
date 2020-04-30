@@ -12,13 +12,14 @@ import java.util.Map;
 
 
 public class MilkManager {
-  
+
   private int maxYear = 0;
   private int minYear = 3000;
-  
+
   public int getMaxYear() {
     return maxYear;
   }
+
   public int getMinYear() {
     return minYear;
   }
@@ -99,50 +100,6 @@ public class MilkManager {
         while ((line = csvReader.readLine()) != null) {
           // split table into rows and add each row to records
           String[] values = line.split(",");
-          
-          //error handling start
-          
-          //checks if there are only 3 colums
-          if(values.length<3) {
-            //create popup error saying missing data
-          }
-          if(values.length>3) {
-            //create popup error saying excess data
-          }
-          
-          //to check the date
-          String[] dateSplit = values[0].split("-");
-          
-          //might have to check if its null after split
-          
-          // checking if the format is right
-          if(dateSplit.length!=3) {
-            //create popup date format wrong
-          }
-          
-          //checks if each part of the date is in number format
-          for(int i =0;i<3;i++) {
-            try {
-              Integer.parseInt(dateSplit[i]);
-            }
-            catch(Exception e) {
-              //not sure which exception to catch
-              //create a popup coz date has characters other than numbers and dashes
-            }
-          }
-          
-          //checks if the weight is in number format
-          try {
-            Integer.parseInt(values[2]);
-          }
-          catch(Exception e2) {
-            //not sure which exception to catch
-            //create a popup coz weight has characters other than nurmbers
-          }
-          
-          //error handling end 
-          
-          
           records.add(Arrays.asList(values));
         }
         csvReader.close();
@@ -178,10 +135,10 @@ public class MilkManager {
     monthYearDate = arr[0] + "-" + arr[1];
     yearDate = arr[0];
     farmID = records.get(1).get(1);
-    
-    if(Integer.parseInt(yearDate) > maxYear)
+
+    if (Integer.parseInt(yearDate) > maxYear)
       maxYear = Integer.parseInt(yearDate);
-    if(Integer.parseInt(yearDate) < minYear) {
+    if (Integer.parseInt(yearDate) < minYear) {
       minYear = Integer.parseInt(yearDate);
     }
 
@@ -361,7 +318,19 @@ public class MilkManager {
    * @return
    */
   public List<List<String>> generateDateRangeReport(int year, int month, int day, int endYear,
-      int endMonth, int endDay) {
+      int endMonth, int endDay) throws Exception {
+
+    // check if input is valid
+    String sdate = Integer.toString(year) + "-" + Integer.toString(month);
+    String edate = Integer.toString(endYear) + "-" + Integer.toString(endMonth);
+    if (milkTableListMonth.containsKey(sdate) == false
+        || milkTableListMonth.containsKey(edate) == false) { // throw exceptions if input is invalid
+      throw new Exception();
+    }
+    if (day < 0 || day > 31 || endDay < 0 || endDay > 31) {
+      throw new Exception();
+    }
+
     List<List<String>> dateRange = generateDateRange(year, month, day, endYear, endMonth, endDay);
     List<String> fList = new ArrayList<String>();
     List<List<String>> report = new ArrayList<List<String>>();
@@ -462,7 +431,7 @@ public class MilkManager {
           day = 1;
         }
       }
-      // reset to first month 
+      // reset to first month
       month = 1;
     }
     return data;
@@ -481,9 +450,9 @@ public class MilkManager {
 
     // mm.getTotalMilkWeight("2019-1", "Farm 0");
     System.out.println(mm.generateDateRange(2019, 1, 1, 2019, 1, 10));
-    System.out.println(mm.generateDateRangeReport(2019, 1, 1, 2019, 1, 10));
+    //System.out.println(mm.generateDateRangeReport(2019, 1, 1, 2019, 1, 10));
 
-    System.out.println(mm.generateDateRangeReport(2019, 1, 20, 2019, 2, 20));
+    //System.out.println(mm.generateDateRangeReport(2019, 1, 20, 2019, 2, 20));
   }
 
 
