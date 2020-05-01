@@ -83,6 +83,7 @@ public class Main extends Application {
     // button for displaying data
     Button readData = new Button("Display Data");
     
+    //button to exit out of the application
     Button exit = new Button("Quit");
     exit.setOnAction(new EventHandler<ActionEvent>() {
 
