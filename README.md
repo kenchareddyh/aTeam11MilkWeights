@@ -28,9 +28,14 @@ Things to do:
 
 
 Bug reports:
- - exception thrown when invalid commands put into the text field for generate report
- - items in generate report are not sorted
- - exception thrown when invalid report is fed into add data
+ - items in annual report, monthly report, and Date-Range report are not sorted
+ - For "display" button, if display button is hit and then back is hit and then display button is it again, when you hit back again in the display button window, you have to hit back to times to go back to the primary window. For some reason a null table is displayed the first time you hit back and then goes away after you hit back again.
+ 
+ Future Additions:
+ - Sort all the data by weights and give the user the option of picking ascending or descending
+ - Fix minor bug with display button windows, back button
+ - Add bar-charts/histograms to generate report button, rather than just a raw table
+ - improve generally on condesing our code and speeding up our processing, by maybe implementing a faster data-structure and more time-effecient code.
  
 
  
