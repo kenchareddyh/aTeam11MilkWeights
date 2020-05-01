@@ -82,6 +82,17 @@ public class Main extends Application {
 
     // button for displaying data
     Button readData = new Button("Display Data");
+    
+    Button exit = new Button("Quit");
+    exit.setOnAction(new EventHandler<ActionEvent>() {
+
+      @Override
+      public void handle(ActionEvent arg0) {
+        System.exit(1);
+        
+      }
+      
+    });
 
 
     /**
@@ -828,7 +839,7 @@ public class Main extends Application {
 
 
 
-    hbox.getChildren().addAll(addData, readData, report);
+    hbox.getChildren().addAll(addData, readData, report,exit);
 
     Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
