@@ -90,6 +90,7 @@ public class Main extends Application {
     // button for displaying data
     Button readData = new Button("Display Data");
 
+    // button for saving log
     Button saveLog = new Button("Save Log");
 
     // button to exit out of the application
