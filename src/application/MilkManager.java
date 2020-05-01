@@ -27,6 +27,8 @@ public class MilkManager {
   // flag for if data is added
   private boolean flag = false;
 
+  // a log of all activity in milk manager
+  private String log = "";
 
   /**
    * method that returns the max year
@@ -97,6 +99,7 @@ public class MilkManager {
       }
     }
 
+    log = log.concat("\n" + list);
     System.out.println(list);
     return list;
 
@@ -163,7 +166,8 @@ public class MilkManager {
                 Integer.parseInt(dateSplit[i]);
               } catch (Exception e) {
                 // create a popup coz date has characters other than numbers and dashes
-                System.out.println("length");
+              	log = log.concat("\n" + "length");
+              	System.out.println("length");
                 createPopup("File has wrong date format. Not been accepted");
                 return false;
               }
@@ -189,6 +193,7 @@ public class MilkManager {
           count++;
         }
         csvReader.close();
+        log = log.concat("\n" + records);
         System.out.println(records);
       } catch (IOException e) {
         e.printStackTrace();
@@ -214,6 +219,7 @@ public class MilkManager {
     }
 
 
+    log = log.concat("\n" + "records:" + records.get(1).get(0));
     System.out.println("records:" + records.get(1).get(0));
 
 
@@ -230,6 +236,7 @@ public class MilkManager {
     }
 
     // i think we need to remove these
+    log = log.concat("\n" + maxYear + "\n" + minYear + "\n" + monthYearDate + "\n" + yearDate);
     System.out.println(maxYear);
     System.out.println(minYear);
     System.out.println(monthYearDate);
@@ -377,6 +384,7 @@ public class MilkManager {
       //loop through the milk table for a month
       for (Map.Entry mapElement : milkTableListMonth.entrySet()) {
         String key = (String) mapElement.getKey();
+        log = log.concat("\n" + "its true");
         System.out.println("its true");
         //the list inside the arrayList
         List<String> subList = new ArrayList<String>();
@@ -384,6 +392,7 @@ public class MilkManager {
         subList.add(key);
         subList.add(getTotalMilkWeight(key, farmID) + "");
         subList.add(Double.toString(getPercentMilkWeight(key, farmID)).substring(0, 5) + "%");
+        log = log.concat("\n" + subList);
         System.out.println(subList);
         //add this sublit to the 2D arraylist
         list.add(subList);
@@ -414,6 +423,7 @@ public class MilkManager {
       subList.add(getTotalMilkWeightYear(year, farmList.get(i)) + "");
       subList.add(
           Double.toString(getPercentMilkWeightYear(year, farmList.get(i))).substring(0, 5) + "%");
+      log = log.concat("\n" + list);
       System.out.println(subList);
       //add the list to the overall 2D list
       list.add(subList);
@@ -439,6 +449,7 @@ public class MilkManager {
       subList.add(
           Double.toString(getPercentMilkWeight(year + "-" + month, farmList.get(i))).substring(0, 5)
               + "%");
+      log = log.concat("\n" + list);
       System.out.println(subList);
       list.add(subList);
     }
@@ -592,6 +603,15 @@ public class MilkManager {
     popup.setScene(scene);
     popup.show();
   }
+  
+  /**
+   * Method that gets the log for this milk manager
+   * 
+   * @return the log
+   */
+  public String getLog() {
+  	return log;
+  }
 
 
   public static void main(String[] args) {
@@ -604,6 +624,7 @@ public class MilkManager {
 
 
     // mm.getTotalMilkWeight("2019-1", "Farm 0");
+    mm.log = mm.log.concat("\n" + mm.generateDateRange(2019, 1, 1, 2019, 1, 10));
     System.out.println(mm.generateDateRange(2019, 1, 1, 2019, 1, 10));
     // System.out.println(mm.generateDateRangeReport(2019, 1, 1, 2019, 1, 10));
 

@@ -1,6 +1,8 @@
 package application;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
@@ -82,6 +84,8 @@ public class Main extends Application {
 
     // button for displaying data
     Button readData = new Button("Display Data");
+    
+    Button saveLog = new Button("Save Log");
     
     //button to exit out of the application
     Button exit = new Button("Quit");
@@ -837,10 +841,37 @@ public class Main extends Application {
       }
 
     });
+    
+    // when the Save Log button is pressed
+ 		saveLog.setOnAction(new EventHandler<ActionEvent>() {
+
+ 			@Override
+ 			public void handle(ActionEvent arg0) {
+
+ 				FileChooser fileChooser = new FileChooser();
+
+ 				// Set extension filter for text files
+ 				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+ 				fileChooser.getExtensionFilters().add(extFilter);
+
+ 				// Show save file dialog
+ 				File file = fileChooser.showSaveDialog(primaryStage);
+
+ 				if (file != null) {
+ 					try {
+ 						PrintWriter writer;
+ 						writer = new PrintWriter(file);
+ 						writer.println(mm.getLog());
+ 						writer.close();
+ 					} catch (IOException ex) {
+ 					}
+ 				}
+ 			}
+ 		});
 
 
 
-    hbox.getChildren().addAll(addData, readData, report,exit);
+    hbox.getChildren().addAll(addData, readData, report, saveLog, exit);
 
     Scene mainScene = new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT);
 
