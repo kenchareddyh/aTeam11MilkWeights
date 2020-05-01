@@ -220,7 +220,7 @@ public class Main extends Application {
                 table.setItems(data);
                 table.getColumns().addAll(dateCol, idCol, weightCol);
 
-
+                //add the table into a vbox
                 final VBox vbox = new VBox();
                 vbox.setSpacing(5);
                 vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -238,6 +238,7 @@ public class Main extends Application {
                 primaryStage.setScene(scene);
               });
 
+          //making a back button to go back one window
           list.setItems(data);
           Button back = new Button("Back");
           back.setOnAction(new EventHandler<ActionEvent>() {
@@ -342,9 +343,10 @@ public class Main extends Application {
                     });
 
 
-                    // have not done the commenting do not knwo what ahppens here
+                    //create a new table
                     TableView<MilkStats> table = new TableView<MilkStats>();
 
+                    //table headers and associating each column with a certain list
                     TableColumn dateCol = new TableColumn("Date");
                     TableColumn weightCol = new TableColumn("Total Weight");
                     TableColumn percentCol = new TableColumn("Percent Weight");
@@ -356,6 +358,7 @@ public class Main extends Application {
                         .setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
                     table.getColumns().addAll(dateCol, weightCol, percentCol);
 
+                    
                     ObservableList<MilkStats> data = FXCollections.observableArrayList();
 
                     // get milkList with mm with given year and month
@@ -372,6 +375,7 @@ public class Main extends Application {
 
                     table.setItems(data);
 
+                    //add table to a vbox
                     VBox vBox = new VBox();
                     vBox.setSpacing(5);
                     vBox.setPadding(new Insets(10, 0, 0, 10));
@@ -379,6 +383,7 @@ public class Main extends Application {
 
                     vBox.getChildren().addAll(title, table, back);
 
+                    //adding a back button
                     Scene scene = new Scene(vBox);
                     previousScene.push(primaryStage.getScene());
                     primaryStage.setScene(scene);
@@ -459,6 +464,7 @@ public class Main extends Application {
                     tableScene.setWidth(300);
                     tableScene.setHeight(500);
 
+                    //make a new table with headers, then associate a header with a certain list
                     TableView<MilkStats> table = new TableView<MilkStats>();
                     TableColumn farmCol = new TableColumn("Farm ID");
                     TableColumn weightCol = new TableColumn("Total Weight");
@@ -497,7 +503,7 @@ public class Main extends Application {
                     });
 
 
-
+                    //add the table to a vbox
                     final VBox vbox = new VBox();
                     vbox.setSpacing(5);
                     vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -524,6 +530,7 @@ public class Main extends Application {
                 }
 
               });
+              
               bordPane.setCenter(vbox1);
               bordPane.setPadding(new Insets(20));
               Scene s1 = new Scene(bordPane, 200, 200);
@@ -582,7 +589,8 @@ public class Main extends Application {
 
                     primaryStage.setWidth(300);
                     primaryStage.setHeight(500);
-
+                    
+                    //create a new table, add headers to the table, and associate each header with a certain list
                     TableView<MilkStats> table = new TableView<MilkStats>();
                     TableColumn farmCol = new TableColumn("Farm ID");
                     TableColumn weightCol = new TableColumn("Total Weight");
@@ -621,6 +629,8 @@ public class Main extends Application {
                         primaryStage.setScene(previousScene.pop());
                       }
                     });
+                    
+                    //add the table to the vbox
                     final VBox vbox = new VBox();
                     vbox.setSpacing(5);
                     vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -690,6 +700,7 @@ public class Main extends Application {
                   primaryStage.setWidth(300);
                   primaryStage.setHeight(500);
 
+                  //create new table with headers, associate each header with a certain list
                   TableView<MilkStats> table = new TableView<MilkStats>();
                   TableColumn farmCol = new TableColumn("Farm ID");
                   TableColumn weightCol = new TableColumn("Total Weight");
@@ -705,6 +716,7 @@ public class Main extends Application {
                   List<List<String>> milkList = new ArrayList<List<String>>();
 
                   try {
+                    //parse and interpret the input text
                     String startDate = t1.getText();
                     String endDate = t2.getText();
                     String[] startArr = startDate.split("/");
@@ -733,7 +745,7 @@ public class Main extends Application {
                     table.setItems(data);
 
 
-
+                    //add a back button
                     final VBox vbox = new VBox();
                     vbox.setSpacing(5);
                     vbox.setPadding(new Insets(10, 0, 0, 10));

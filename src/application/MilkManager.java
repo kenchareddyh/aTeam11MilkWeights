@@ -18,18 +18,19 @@ import javafx.stage.Stage;
 
 public class MilkManager {
 
-  //the maximum year
+  // the maximum year
   private int maxYear = 0;
-  
-  //the minmum year
+
+  // the minmum year
   private int minYear = 3000;
-  
+
   // flag for if data is added
   private boolean flag = false;
 
-  
+
   /**
    * method that returns the max year
+   * 
    * @return the max year
    */
   public int getMaxYear() {
@@ -38,12 +39,13 @@ public class MilkManager {
 
   /**
    * method that returns the min year
+   * 
    * @return the min year
    */
   public int getMinYear() {
     return minYear;
   }
-  
+
   public boolean getFlag() {
     return flag;
   }
@@ -125,67 +127,65 @@ public class MilkManager {
         while ((line = csvReader.readLine()) != null) {
           // split table into rows and add each row to records
           String[] values = line.split(",");
-          
-          //start of checking for invalid file input
-          //checks to make sure it is not the first row
-          if(count!=0) {
-            
-          //checks if there are only 3 columns
-            if(values.length<3) {
-              //create popup error saying missing data
+
+          // start of checking for invalid file input
+          // checks to make sure it is not the first row
+          if (count != 0) {
+
+            // checks if there are only 3 columns
+            if (values.length < 3) {
+              // create popup error saying missing data
               createPopup("File has missing data. Not been accepted");
               return false;
             }
-            if(values.length>3) {
-              //create popup error saying excess data
+            if (values.length > 3) {
+              // create popup error saying excess data
               createPopup("File has excess data. Not been accepted");
               return false;
             }
-            
-            //to check the date
+
+            // to check the date
             String[] dateSplit = values[0].split("-");
-            
-            //might have to check if its null after split
-            
+
+            // might have to check if its null after split
+
             // checking if the format is right
-            if(dateSplit.length!=3) {
-              //create popup date format wrong
+            if (dateSplit.length != 3) {
+              // create popup date format wrong
               createPopup("File has wrong date format. Not been accepted");
               return false;
             }
-            
-            //checks if each part of the date is in number format
-            for(int i =0;i<3;i++) {
+
+            // checks if each part of the date is in number format
+            for (int i = 0; i < 3; i++) {
               try {
-                //to check if it can be converted to an integer or not
+                // to check if it can be converted to an integer or not
                 Integer.parseInt(dateSplit[i]);
-              }
-              catch(Exception e) {
-                //create a popup coz date has characters other than numbers and dashes
+              } catch (Exception e) {
+                // create a popup coz date has characters other than numbers and dashes
                 System.out.println("length");
                 createPopup("File has wrong date format. Not been accepted");
                 return false;
               }
             }
-            
-            //checks if the weight is in number format
+
+            // checks if the weight is in number format
             try {
-              //to check if it can be converted into an integer or not
+              // to check if it can be converted into an integer or not
               Integer.parseInt(values[2]);
-            }
-            catch(Exception e2) {
-              //not sure which exception to catch
-              //create a popup coz weight has characters other than nurmbers
+            } catch (Exception e2) {
+              // not sure which exception to catch
+              // create a popup coz weight has characters other than nurmbers
               createPopup("File has characters other than numbers for weight. Not been accepted");
               return false;
             }
-            
-            //error handling end
+
+            // error handling end
           }
-          
-          
-          records.add(Arrays.asList(values));         
-          //incrementing counter to show which row it is at
+
+
+          records.add(Arrays.asList(values));
+          // incrementing counter to show which row it is at
           count++;
         }
         csvReader.close();
@@ -210,7 +210,7 @@ public class MilkManager {
       } catch (IllegalNullKeyException e) {
         e.printStackTrace();
       }
-      
+
     }
 
 
@@ -229,7 +229,7 @@ public class MilkManager {
       minYear = Integer.parseInt(yearDate);
     }
 
-    //i think we need to remove these
+    // i think we need to remove these
     System.out.println(maxYear);
     System.out.println(minYear);
     System.out.println(monthYearDate);
@@ -241,7 +241,7 @@ public class MilkManager {
 
     // set flag to true if file was succesfully parsed
     flag = true;
-    //returns true if no errors occurred and parsed through the csv file succesfully
+    // returns true if no errors occurred and parsed through the csv file succesfully
     return true;
 
   }
@@ -256,12 +256,14 @@ public class MilkManager {
   public int getTotalMilkWeight(String value, String farmID) throws Exception {
     try {
       int totalMilk = 0;
+      // get a milktable from the hashtable of a month
       MilkTable mt = milkTableListMonth.get(value);
       if (mt != null) {
+        // go through the milk table and find if the farm id of a certain index matches the farmID
         for (int i = 0; i < mt.size(); i++) {
 
           if (mt.getFarmId(i).equals(farmID)) {
-
+            // add the milk weight to the total milk weight
             totalMilk = totalMilk + mt.getMilkWeight(i);
           }
         }
@@ -286,9 +288,10 @@ public class MilkManager {
   public int getTotalMilkWeightYear(String value, String farmID) throws Exception {
     try {
       int totalMilk = 0;
+      // get a milk table from the hashtable
       MilkTable mt = milkTableListYear.get(value);
       for (int i = 0; i < mt.size(); i++) {
-
+        // if the id's match, then add the corresponding milk weight to the total
         if (mt.getFarmId(i).equals(farmID)) {
 
           totalMilk = totalMilk + mt.getMilkWeight(i);
@@ -312,15 +315,18 @@ public class MilkManager {
    */
   public double getPercentMilkWeight(String value, String farmID) throws Exception {
     try {
+      // get the total milk weight of a certain month
       double total = (double) getTotalMilkWeight(value, farmID);
       double grandTotal = 0.0;
       MilkTable mt = milkTableListMonth.get(value);
 
       if (mt != null) {
         for (int i = 0; i < mt.size(); i++) {
+          // add the corresponding farm's milk weight to the grand total
           grandTotal = grandTotal + mt.getMilkWeight(i);
         }
       }
+      // get a percent by dividing total by grandTotal, then multiplying it by 100
       return (total / grandTotal) * 100;
     } catch (Exception e) {
       throw new Exception();
@@ -328,24 +334,27 @@ public class MilkManager {
 
   }
 
- 
+
   /**
    * gets the percent of the total milk weight that a certain farm produced over a certain year
    * 
-   * @param value - the year
+   * @param value  - the year
    * @param farmID - the farm id
    * @return the percentage
    * @throws Exception
    */
   public double getPercentMilkWeightYear(String value, String farmID) throws Exception {
     try {
+      // get a total for a year, instead of just for a month
       double total = (double) getTotalMilkWeightYear(value, farmID);
       double grandTotal = 0.0;
+
       MilkTable mt = milkTableListYear.get(value);
       for (int i = 0; i < mt.size(); i++) {
+        // add the corresponding milk weight to the grand total
         grandTotal = grandTotal + mt.getMilkWeight(i);
       }
-
+      // compute the percent
       return (total / grandTotal) * 100;
     } catch (Exception e) {
       throw new Exception();
@@ -353,18 +362,30 @@ public class MilkManager {
 
   }
 
-  // david
+  /**
+   * get a 2D arraylist for the data of all months, its purpose is to build the MilkStats class in
+   * the main class
+   * 
+   * @param year the year
+   * @param farmID the farm id
+   * @return a 2D arraylist of data
+   * @throws Exception
+   */
   public List<List<String>> dataForAllMonths(String year, String farmID) throws Exception {
     try {
       List<List<String>> list = new ArrayList<List<String>>();
+      //loop through the milk table for a month
       for (Map.Entry mapElement : milkTableListMonth.entrySet()) {
         String key = (String) mapElement.getKey();
         System.out.println("its true");
+        //the list inside the arrayList
         List<String> subList = new ArrayList<String>();
+        //fill the array list with the date, then the total milk weight, then the milk weight percentage
         subList.add(key);
         subList.add(getTotalMilkWeight(key, farmID) + "");
         subList.add(Double.toString(getPercentMilkWeight(key, farmID)).substring(0, 5) + "%");
         System.out.println(subList);
+        //add this sublit to the 2D arraylist
         list.add(subList);
       }
 
@@ -375,30 +396,44 @@ public class MilkManager {
 
 
   }
-  
 
-  //for annual report
+
+  /**
+   * generate the list for milkStats class, but with annual data
+   * @param year
+   * @return a 2D arraylist filled with data
+   * @throws Exception
+   */
   public List<List<String>> dataForAllFarmsAnnual(String year) throws Exception {
     List<List<String>> list = new ArrayList<List<String>>();
+    //loop through a milkTable to gather data
     for (int i = 0; i < farmList.size(); i++) {
       List<String> subList = new ArrayList<String>();
-
+      //add the date, the total milk weight, and the percent milk weight to the sublist
       subList.add(farmList.get(i));
       subList.add(getTotalMilkWeightYear(year, farmList.get(i)) + "");
       subList.add(
           Double.toString(getPercentMilkWeightYear(year, farmList.get(i))).substring(0, 5) + "%");
       System.out.println(subList);
+      //add the list to the overall 2D list
       list.add(subList);
     }
     return list;
   }
 
-  // for monthly report
+  /**
+   * generate the list for MilkStats class, but for each month
+   * @param year the given year
+   * @param month the given month
+   * @return a 2D list of data for the given month
+   * @throws Exception
+   */
   public List<List<String>> dataForAllFarmsMonthly(String year, String month) throws Exception {
     List<List<String>> list = new ArrayList<List<String>>();
+    //loop through the milk table
     for (int i = 0; i < farmList.size(); i++) {
       List<String> subList = new ArrayList<String>();
-
+      //add the date, total milk weight, and percent milk weight to the sublist 
       subList.add(farmList.get(i));
       subList.add(getTotalMilkWeight(year + "-" + month, farmList.get(i)) + "");
       subList.add(
@@ -434,26 +469,29 @@ public class MilkManager {
     if (day < 0 || day > 31 || endDay < 0 || endDay > 31) {
       throw new Exception();
     }
-
+    //2D list for the data
     List<List<String>> dateRange = generateDateRange(year, month, day, endYear, endMonth, endDay);
     List<String> fList = new ArrayList<String>();
     List<List<String>> report = new ArrayList<List<String>>();
     double grandTotal = 0.0;
 
+    //loop through the list and add data from dateRange into fList
     for (int i = 0; i < dateRange.size(); i++) {
       if (fList.contains(dateRange.get(i).get(1)) == false) {
         fList.add(dateRange.get(i).get(1));
       }
     }
+    //compute the grand total by getting the data from fList
     for (int i = 0; i < fList.size(); i++) {
       grandTotal = grandTotal + getTotalMilkWeightRange(fList.get(i), dateRange);
     }
 
+    //loop through fList
     for (int i = 0; i < fList.size(); i++) {
       List<String> list = new ArrayList<String>();
       int tWeight = getTotalMilkWeightRange(fList.get(i), dateRange);
       double pWeight = Math.round((tWeight / grandTotal) * 100);
-
+      //add to the list, the date, the total weight, and the percentage
       list.add(fList.get(i));
       list.add(Integer.toString(tWeight));
       list.add(pWeight + "%");
@@ -541,7 +579,7 @@ public class MilkManager {
     return data;
 
   }
-  
+
   /**
    * Method that generates a popup with only the message parameter as a message
    * 
@@ -550,7 +588,7 @@ public class MilkManager {
   public void createPopup(String message) {
     Stage popup = new Stage();
     Label msg = new Label(message);
-    Scene scene = new Scene(msg, 500,100);
+    Scene scene = new Scene(msg, 500, 100);
     popup.setScene(scene);
     popup.show();
   }
@@ -567,9 +605,9 @@ public class MilkManager {
 
     // mm.getTotalMilkWeight("2019-1", "Farm 0");
     System.out.println(mm.generateDateRange(2019, 1, 1, 2019, 1, 10));
-    //System.out.println(mm.generateDateRangeReport(2019, 1, 1, 2019, 1, 10));
+    // System.out.println(mm.generateDateRangeReport(2019, 1, 1, 2019, 1, 10));
 
-    //System.out.println(mm.generateDateRangeReport(2019, 1, 20, 2019, 2, 20));
+    // System.out.println(mm.generateDateRangeReport(2019, 1, 20, 2019, 2, 20));
   }
 
 
