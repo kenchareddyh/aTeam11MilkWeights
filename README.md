@@ -35,7 +35,9 @@ Bug reports:
  - Sort all the data by weights and give the user the option of picking ascending or descending
  - Fix minor bug with display button windows, back button
  - Add bar-charts/histograms to generate report button, rather than just a raw table
+ - Add more meaningful error messages depending on what the user inputted incorrectly
  - improve generally on condesing our code and speeding up our processing, by maybe implementing a faster data-structure and more time-effecient code.
+ 
  
 
  
