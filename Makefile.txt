@@ -1,0 +1,40 @@
+.PHONY = make jar runjar test clean
+
+# replace with path to your javac,java,jar,javafx installations
+JC = C:\Program Files (x86)\Java\jre1.8.0_241\bin     # replace with path to javac or javac.exe
+JAR = C:\Users\Daniel Ye\Pictures\a3-2.jar      # replace with path to jar or jar.exe
+JAVA = C:\Program Files (x86)\Java\jre1.8.0_241\bin    # replace with path to java or javaw.exe
+MP = --module-path javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml #-Dfile.encoding=UTF-8 
+CP = -classpath ".:application" 
+APP = application.Main
+
+#CLASSPATH = .:junit-platform-console-standalone-1.5.2.jar:json-simple-1.1.1.jar
+
+make: 
+	$(C:\Program Files (x86)\Java\jre1.8.0_241\bin) $(--module-path javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml) $(-classpath ".:application") -d . application/*.java
+
+run:
+	$(C:\Program Files (x86)\Common Files\Oracle\Java\javapath) $(--module-path javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml) $(-classpath ".:application") application.Main
+
+fx: 
+	$(C:\Program Files (x86)\Java\jre1.8.0_241\bin) $(--module-path javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml) $(-classpath ".:application") -d . application/*.java
+
+fxrun:
+	$(C:\Program Files (x86)\Common Files\Oracle\Java\javapath) $(--module-path javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml) $(-classpath ".:application") $(application.Main)
+
+jar: 
+	$(C:\Users\Daniel Ye\Pictures\a3-2.jar) cvmf manifest.txt executable.jar .
+
+runjar:
+	java $(MP) -jar executable.jar
+
+zip:
+	zip team.zip application/* *
+
+test: 
+	javac $(--module-path javafx-sdk-11.0.2/lib --add-modules javafx.controls,javafx.fxml) -cp $(.:junit-platform-console-standalone-1.5.2.jar:json-simple-1.1.1.jar) *.java
+	java -jar junit-platform-console-standalone-1.5.2.jar --class-path $(.:junit-platform-console-standalone-1.5.2.jar:json-simple-1.1.1.jar) -p ""
+
+clean:
+	\rm application/*.class
+	\rm executable.jar
