@@ -14,6 +14,22 @@ Which team members were on same xteam together?
 
 Harsha Kenchareddy, Daniel Ye, David Yin
 
-Other notes or comments to the grader:
+Things to do:
+ - create the data structure
+ - create manager for data structure
+      - create a parser
+      - create a method that gets the milk weight total
+      - create a method that gets the milk weight percentage
+ - create the main class that displays data struture
+      - create and finish add data
+      - create and finish read data
+      - create and finish generate report
+
+
+Bug reports:
+ - exception thrown when invalid commands put into the text field for generate report
+ - items in generate report are not sorted
+ - exception thrown when invalid report is fed into add data
+ 
 
  
