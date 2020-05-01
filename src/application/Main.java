@@ -43,6 +43,11 @@ import javafx.stage.Stage;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
+/**
+ * Instantiates the gui application of the MilkWeights project
+ * 
+ *
+ */
 public class Main extends Application {
   // store any command-line arguments that were entered.
   // NOTE: this.getParameters().getRaw() will get these also
@@ -54,7 +59,7 @@ public class Main extends Application {
   // flag to see if data was added
   private boolean flag = false;
 
-  private static final int WINDOW_WIDTH = 400;
+  private static final int WINDOW_WIDTH = 500;
   private static final int WINDOW_HEIGHT = 200;
   private static final String APP_TITLE = "Milk Weights";
 
@@ -84,25 +89,24 @@ public class Main extends Application {
 
     // button for displaying data
     Button readData = new Button("Display Data");
-    
+
     Button saveLog = new Button("Save Log");
-    
-    //button to exit out of the application
+
+    // button to exit out of the application
     Button exit = new Button("Quit");
     exit.setOnAction(new EventHandler<ActionEvent>() {
 
       @Override
       public void handle(ActionEvent arg0) {
         System.exit(1);
-        
+
       }
-      
+
     });
 
 
-    /**
-     * Add csv file when the button is selected
-     */
+    /////// Add Data button //////////
+
     addData.setOnAction(new EventHandler<ActionEvent>() {
 
       @Override
@@ -138,7 +142,6 @@ public class Main extends Application {
               vbox.getChildren().add(errorMSG);
             }
 
-
           }
         });
 
@@ -154,7 +157,7 @@ public class Main extends Application {
 
         vbox.getChildren().addAll(l, l2, b, back);
         // creates a new scene
-        Scene scene = new Scene(vbox, 200, 200);
+        Scene scene = new Scene(vbox, 300, 300);
         // adds the current scene to a stack
         previousScene.push(primaryStage.getScene());
         // changes the layout to a new scene
@@ -167,9 +170,8 @@ public class Main extends Application {
     // error label to display if no data files have been entered
     Label noDataLabel = new Label("Can only access buttons after entering a valid file");
 
-    /**
-     * Does the read stuff
-     */
+
+    //////// Display Data button //////////////
     readData.setOnAction(new EventHandler<ActionEvent>() {
 
 
@@ -236,7 +238,7 @@ public class Main extends Application {
                 table.setItems(data);
                 table.getColumns().addAll(dateCol, idCol, weightCol);
 
-                //add the table into a vbox
+                // add the table into a vbox
                 final VBox vbox = new VBox();
                 vbox.setSpacing(5);
                 vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -254,7 +256,7 @@ public class Main extends Application {
                 primaryStage.setScene(scene);
               });
 
-          //making a back button to go back one window
+          // making a back button to go back one window
           list.setItems(data);
           Button back = new Button("Back");
           back.setOnAction(new EventHandler<ActionEvent>() {
@@ -279,7 +281,8 @@ public class Main extends Application {
 
 
 
-    // when button is clicked on
+    //////////// Report Button /////////////////////
+
     report.setOnAction(new EventHandler<ActionEvent>() {
 
       @Override
@@ -303,9 +306,11 @@ public class Main extends Application {
 
           bPane.setCenter(vbox);
           bPane.setPadding(new Insets(20));
-          vbox.getChildren().addAll(l, farm, annual, monthly, dateRange, back);
+          vbox.getChildren().addAll(l, farm, annual, monthly, dateRange, back); // Set vBox to all
+                                                                                // buttons
 
-          // when the Farm Report button is pressed
+          ////////// Farm Report /////////////
+
           farm.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -359,10 +364,10 @@ public class Main extends Application {
                     });
 
 
-                    //create a new table
+                    // create a new table
                     TableView<MilkStats> table = new TableView<MilkStats>();
 
-                    //table headers and associating each column with a certain list
+                    // table headers and associating each column with a certain list
                     TableColumn dateCol = new TableColumn("Date");
                     TableColumn weightCol = new TableColumn("Total Weight");
                     TableColumn percentCol = new TableColumn("Percent Weight");
@@ -374,39 +379,37 @@ public class Main extends Application {
                         .setCellValueFactory(new PropertyValueFactory<MilkStats, String>("item3"));
                     table.getColumns().addAll(dateCol, weightCol, percentCol);
 
-                    
+
                     ObservableList<MilkStats> data = FXCollections.observableArrayList();
 
                     // get milkList with mm with given year and month
 
                     List<List<String>> milkList = mm.dataForAllMonths(t2.getText(), t1.getText());
-                    
-                    //sort milkList
-                    for(int i = 1; i < milkList.size(); i++) {
+
+                    // sort milkList
+                    for (int i = 1; i < milkList.size(); i++) {
                       String[] arr = milkList.get(i).get(0).split("-");
                       int ikey = Integer.parseInt(arr[0] + arr[1]);
                       List<String> keyString = milkList.get(i);
-                      
+
                       int j = i - 1;
                       String[] arr2 = milkList.get(j).get(0).split("-");
                       int jkey = Integer.parseInt(arr2[0] + arr2[1]);
-                      
-                      while(j >= 0 && jkey > ikey) {
+
+                      while (j >= 0 && jkey > ikey) {
                         milkList.set((j + 1), milkList.get(j));
                         j = j - 1;
                       }
-                      milkList.set((j+1), keyString);
+                      milkList.set((j + 1), keyString);
                     }
 
-                    // populate the observable list
+                    // populate the observable list and set data to table
                     for (int i = 0; i < milkList.size(); i++) {
                       data.add(new MilkStats(milkList.get(i)));
                     }
-
-
                     table.setItems(data);
 
-                    //add table to a vbox
+                    // add table to a vbox
                     VBox vBox = new VBox();
                     vBox.setSpacing(5);
                     vBox.setPadding(new Insets(10, 0, 0, 10));
@@ -414,7 +417,7 @@ public class Main extends Application {
 
                     vBox.getChildren().addAll(title, table, back);
 
-                    //adding a back button
+                    // adding a back button
                     Scene scene = new Scene(vBox);
                     previousScene.push(primaryStage.getScene());
                     primaryStage.setScene(scene);
@@ -423,13 +426,11 @@ public class Main extends Application {
                     // invalid
                     try {
                       vbox1.getChildren().add(l);
-                    }catch(Exception a) {
-                      
+                    } catch (Exception a) {
+
                     }
-                    
+
                   }
-
-
 
                 }
 
@@ -453,7 +454,8 @@ public class Main extends Application {
 
           });
 
-          // when the Annual Report button is pressed
+          ///////// Generate Annual Report /////////////
+
           annual.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -485,7 +487,7 @@ public class Main extends Application {
                 @Override
                 public void handle(ActionEvent arg0) {
                   try {
-                    // checks if it can be converted to an integer
+                    // checks if value can be converted to an integer
                     Integer.parseInt(t1.getText());
                     vbox1.getChildren().remove(l);
                     VBox v = new VBox();
@@ -495,7 +497,7 @@ public class Main extends Application {
                     tableScene.setWidth(300);
                     tableScene.setHeight(500);
 
-                    //make a new table with headers, then associate a header with a certain list
+                    // make a new table with headers, then associate a header with a certain list
                     TableView<MilkStats> table = new TableView<MilkStats>();
                     TableColumn farmCol = new TableColumn("Farm ID");
                     TableColumn weightCol = new TableColumn("Total Weight");
@@ -534,7 +536,7 @@ public class Main extends Application {
                     });
 
 
-                    //add the table to a vbox
+                    // add the table to a vbox
                     final VBox vbox = new VBox();
                     vbox.setSpacing(5);
                     vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -551,17 +553,15 @@ public class Main extends Application {
                     // input was invalid
                     try {
                       vbox1.getChildren().add(l);
-                    }catch(Exception a) {
-                      
+                    } catch (Exception a) {
+
                     }
                   }
-
-
 
                 }
 
               });
-              
+
               bordPane.setCenter(vbox1);
               bordPane.setPadding(new Insets(20));
               Scene s1 = new Scene(bordPane, 200, 200);
@@ -571,7 +571,8 @@ public class Main extends Application {
 
           });
 
-          // when the Monthly Report button is pressed
+          /////// Generate Monthly Report /////////
+
           monthly.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -620,8 +621,9 @@ public class Main extends Application {
 
                     primaryStage.setWidth(300);
                     primaryStage.setHeight(500);
-                    
-                    //create a new table, add headers to the table, and associate each header with a certain list
+
+                    // create a new table, add headers to the table, and associate each header with
+                    // a certain list
                     TableView<MilkStats> table = new TableView<MilkStats>();
                     TableColumn farmCol = new TableColumn("Farm ID");
                     TableColumn weightCol = new TableColumn("Total Weight");
@@ -660,8 +662,8 @@ public class Main extends Application {
                         primaryStage.setScene(previousScene.pop());
                       }
                     });
-                    
-                    //add the table to the vbox
+
+                    // add the table to the vbox
                     final VBox vbox = new VBox();
                     vbox.setSpacing(5);
                     vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -676,8 +678,8 @@ public class Main extends Application {
                     // the input was invalid
                     try {
                       vbox1.getChildren().add(l);
-                    }catch(Exception a) {
-                      
+                    } catch (Exception a) {
+
                     }
                   }
 
@@ -692,7 +694,8 @@ public class Main extends Application {
 
           });
 
-          // when the Date Range Report button is pressed
+          /////// Generate DateRangeReport ////////////////
+
           dateRange.setOnAction(new EventHandler<ActionEvent>() {
 
             @Override
@@ -731,7 +734,7 @@ public class Main extends Application {
                   primaryStage.setWidth(300);
                   primaryStage.setHeight(500);
 
-                  //create new table with headers, associate each header with a certain list
+                  // create new table with headers, associate each header with a certain list
                   TableView<MilkStats> table = new TableView<MilkStats>();
                   TableColumn farmCol = new TableColumn("Farm ID");
                   TableColumn weightCol = new TableColumn("Total Weight");
@@ -747,7 +750,7 @@ public class Main extends Application {
                   List<List<String>> milkList = new ArrayList<List<String>>();
 
                   try {
-                    //parse and interpret the input text
+                    // parse and interpret the input text
                     String startDate = t1.getText();
                     String endDate = t2.getText();
                     String[] startArr = startDate.split("/");
@@ -775,8 +778,6 @@ public class Main extends Application {
 
                     table.setItems(data);
 
-
-                    //add a back button
                     final VBox vbox = new VBox();
                     vbox.setSpacing(5);
                     vbox.setPadding(new Insets(10, 0, 0, 10));
@@ -800,12 +801,10 @@ public class Main extends Application {
                     // input data was invalid
                     try {
                       vbox1.getChildren().add(l);
-                    }catch(Exception a) {
-                      
+                    } catch (Exception a) {
+
                     }
                   }
-
-
 
                 }
 
@@ -841,33 +840,34 @@ public class Main extends Application {
       }
 
     });
-    
+
     // when the Save Log button is pressed
- 		saveLog.setOnAction(new EventHandler<ActionEvent>() {
+    saveLog.setOnAction(new EventHandler<ActionEvent>() {
 
- 			@Override
- 			public void handle(ActionEvent arg0) {
+      @Override
+      public void handle(ActionEvent arg0) {
 
- 				FileChooser fileChooser = new FileChooser();
+        FileChooser fileChooser = new FileChooser();
 
- 				// Set extension filter for text files
- 				FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
- 				fileChooser.getExtensionFilters().add(extFilter);
+        // Set extension filter for text files
+        FileChooser.ExtensionFilter extFilter =
+            new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+        fileChooser.getExtensionFilters().add(extFilter);
 
- 				// Show save file dialog
- 				File file = fileChooser.showSaveDialog(primaryStage);
+        // Show save file dialog
+        File file = fileChooser.showSaveDialog(primaryStage);
 
- 				if (file != null) {
- 					try {
- 						PrintWriter writer;
- 						writer = new PrintWriter(file);
- 						writer.println(mm.getLog());
- 						writer.close();
- 					} catch (IOException ex) {
- 					}
- 				}
- 			}
- 		});
+        if (file != null) {
+          try {
+            PrintWriter writer;
+            writer = new PrintWriter(file);
+            writer.println(mm.getLog());
+            writer.close();
+          } catch (IOException ex) {
+          }
+        }
+      }
+    });
 
 
 
@@ -877,7 +877,7 @@ public class Main extends Application {
 
 
 
-    // Add the stuff and set the primary stage
+    // Add the contstants and set the primary stage
     primaryStage.setTitle(APP_TITLE);
     primaryStage.setScene(mainScene);
     primaryStage.show();
@@ -921,7 +921,7 @@ public class Main extends Application {
   }
 
   /**
-   * Milk stats for generating data
+   * Milk stats class for generating data to store in table
    *
    */
   public class MilkStats {
